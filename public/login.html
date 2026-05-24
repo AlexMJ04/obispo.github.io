@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Iniciar Sesión - Obispo Lácteo</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="local-db-fallback.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#154212",
+            "primary-container": "#2d5a27",
+            "on-primary": "#ffffff",
+            "outline-variant": "#c2c9bb",
+            "surface": "#f8f9ff",
+            "on-surface": "#0d1c2e",
+            "on-surface-variant": "#42493e",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem"
+          },
+          "fontFamily": {
+            "body": ["Hanken Grotesk"],
+            "display": ["Work Sans"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background-color: #f8f9ff;
+      min-height: 100vh;
+    }
+  
+        /* Custom styles for dark mode */
+        html.dark .glass-card {
+            background: rgba(22, 32, 50, 0.8) !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-bright,
+        html.dark .hover\:bg-surface-bright:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-outline-variant,
+        html.dark .hover\:bg-outline-variant:hover {
+            background-color: #25354e !important;
+        }
+        html.dark .bg-emerald-100 {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-emerald-800 {
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-amber-100 {
+            background-color: #78350f !important;
+        }
+        html.dark .text-amber-800 {
+            color: #fde68a !important;
+        }
+        html.dark .bg-blue-100 {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-blue-800 {
+            color: #bfdbfe !important;
+        }
+        html.dark .bg-green-100\/90 {
+            background-color: rgba(6, 78, 59, 0.9) !important;
+        }
+        html.dark body {
+            background-color: #0b0f19 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark header {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark header h2 {
+            color: #10b981 !important;
+        }
+        html.dark aside {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark aside a:not(.bg-primary-container) {
+            color: #94a3b8 !important;
+        }
+        html.dark aside a:not(.bg-primary-container):hover {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+        html.dark main {
+            background-color: #0b0f19 !important;
+        }
+        html.dark .bg-white,
+        html.dark .bg-surface-container-lowest {
+            background-color: #162032 !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-container-low {
+            background-color: #0f172a !important;
+        }
+        html.dark .bg-surface-container {
+            background-color: #101726 !important;
+        }
+        html.dark .bg-surface-container-high {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-surface-container-highest {
+            background-color: #222f47 !important;
+        }
+        html.dark .border-outline,
+        html.dark .border-outline-variant,
+        html.dark .border-outline-variant\/30,
+        html.dark .border-outline-variant\/40,
+        html.dark .border-outline-variant\/60,
+        html.dark .border-outline-variant\/80,
+        html.dark .divide-outline-variant,
+        html.dark .divide-y > * {
+            border-color: #25354e !important;
+        }
+        html.dark .text-on-surface {
+            color: #f8fafc !important;
+        }
+        html.dark .text-on-surface-variant {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-on-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-on-secondary-container {
+            color: #e2e8f0 !important;
+        }
+        html.dark .text-on-tertiary-container {
+            color: #ffaac8 !important;
+        }
+        html.dark .text-on-error-container {
+            color: #fca5a5 !important;
+        }
+        html.dark .text-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-secondary-container {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-error {
+            color: #ef4444 !important;
+        }
+        html.dark .text-primary {
+            color: #10b981 !important;
+        }
+        html.dark .text-on-primary {
+            color: #0b0f19 !important;
+        }
+        html.dark table thead tr {
+            background-color: #101726 !important;
+            color: #f8fafc !important;
+        }
+        html.dark table tbody tr {
+            border-color: #25354e !important;
+        }
+        html.dark table tbody tr:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #25354e !important;
+        }
+        html.dark input:focus,
+        html.dark select:focus,
+        html.dark textarea:focus {
+            border-color: #10b981 !important;
+            background-color: #1e293b !important;
+            outline: none !important;
+        }
+        html.dark .bg-primary-container {
+            background-color: #064e3b !important;
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-secondary-container {
+            background-color: #1e293b !important;
+        }
+        html.dark .bg-tertiary-container {
+            background-color: #581c36 !important;
+        }
+        html.dark .bg-error-container {
+            background-color: #7f1d1d !important;
+            color: #fca5a5 !important;
+        }
+        html.dark nav.fixed {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark nav.fixed a:not(.text-primary) {
+            color: #94a3b8 !important;
+        }
+        html.dark .bg-primary {
+            background-color: #10b981 !important;
+            color: #0b0f19 !important;
+        }
+        html.dark .bg-primary:hover {
+            background-color: #059669 !important;
+        }
+        html.dark .bg-\[\#e3f2fd\] {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-\[\#1565c0\] {
+            color: #93c5fd !important;
+        }
+        html.dark .bg-\[\#dcfce7\] {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-\[\#14532d\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#2e7d32\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#c62828\] {
+            color: #fca5a5 !important;
+        }
+        html.dark svg path[stroke="#154212"] {
+            stroke: #10b981 !important;
+        }
+        html.dark svg circle[fill="#154212"] {
+            fill: #10b981 !important;
+        }
+        html.dark stop[stop-color="#154212"] {
+            stop-color: #10b981 !important;
+        }
+        html.dark .shadow-sm,
+        html.dark .shadow-md,
+        html.dark .shadow-lg,
+        html.dark .shadow-xl {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
+        }
+        html.dark ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        html.dark ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #25354e;
+            border-radius: 4px;
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+  <div id="app" class="w-full max-w-md bg-white border border-outline-variant/60 rounded-2xl shadow-xl p-8 text-center relative overflow-hidden">
+    <button @click="toggleTheme" class="fixed top-4 right-4 w-10 h-10 rounded-full bg-white dark:bg-[#162032] border border-outline-variant/60 dark:border-[#25354e] shadow-md hover:scale-105 active:scale-95 text-on-surface-variant dark:text-gray-300 transition-all flex items-center justify-center cursor-pointer z-50" :title="isDarkMode ? 'Modo Claro' : 'Modo Oscuro'">
+      <span class="material-symbols-outlined text-[20px]">{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
+    </button>
+    
+    <!-- Header decoration -->
+    <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+    
+    <div class="mb-8">
+      <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-on-primary mx-auto mb-4 shadow-md">
+        <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+      </div>
+      <h2 class="font-display text-2xl font-bold text-primary">Obispo Lácteo</h2>
+      <p class="text-on-surface-variant text-sm mt-1">Gestión de Producción Pecuaria</p>
+    </div>
+
+    <!-- Error Alert Container -->
+    <div v-if="errorMsg" class="mb-6 p-4 bg-error-container text-on-error-container border border-error/20 rounded-xl text-left flex gap-3 items-center">
+      <span class="material-symbols-outlined text-error flex-shrink-0" style="font-variation-settings: 'FILL' 1;">error</span>
+      <p class="text-sm font-medium">{{ errorMsg }}</p>
+    </div>
+
+    <form @submit.prevent="handleLogin" class="text-left space-y-5">
+      <div>
+        <label class="block font-medium text-on-surface-variant text-sm mb-1.5">Correo Electrónico</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 text-[20px]" data-icon="mail">mail</span>
+          <input v-model="email" required type="email" class="w-full pl-11 pr-4 py-3 bg-surface border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-body-md" placeholder="admin@obispodairy.com"/>
+        </div>
+      </div>
+      
+      <div>
+        <label class="block font-medium text-on-surface-variant text-sm mb-1.5">Contraseña</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/80 text-[20px]" data-icon="lock">lock</span>
+          <input v-model="password" required :type="showPassword ? 'text' : 'password'" class="w-full pl-11 pr-12 py-3 bg-surface border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-body-md" placeholder="••••••••"/>
+          <button type="button" @click="showPassword = !showPassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+            <span class="material-symbols-outlined text-[20px]">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" :disabled="loading" class="w-full py-3.5 bg-primary text-on-primary font-bold rounded-xl shadow-md hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 mt-8 disabled:opacity-70">
+        <span v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+        <span>{{ loading ? 'Iniciando Sesión...' : 'Ingresar al Sistema' }}</span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+                    isDarkMode: false,
+          email: '',
+          password: '',
+          showPassword: false,
+          errorMsg: '',
+          loading: false
+        };
+      },
+      mounted() {
+                const theme = localStorage.getItem('theme') || 'light';
+                this.isDarkMode = theme === 'dark';
+                if (this.isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+
+        // Clear logged in user if they go to login page
+        localStorage.removeItem('loggedInUser');
+      },
+      methods: {
+                toggleTheme() {
+                    this.isDarkMode = !this.isDarkMode;
+                    if (this.isDarkMode) {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+                },
+
+        async handleLogin() {
+          this.errorMsg = '';
+          this.loading = true;
+          try {
+            const res = await fetch('/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: this.email, password: this.password })
+            });
+            if (res.ok) {
+              const user = await res.json();
+              localStorage.setItem('loggedInUser', JSON.stringify(user));
+              window.location.href = 'index.html';
+            } else {
+              let errorMessage = 'Error al iniciar sesión';
+              try {
+                const data = await res.json();
+                errorMessage = data.error || errorMessage;
+              } catch (jsonErr) {
+                // Response body is not JSON
+              }
+              
+              if (res.status === 401 || res.status === 403) {
+                this.errorMsg = errorMessage;
+                return;
+              }
+              if (res.status === 404) {
+                this.localLoginFallback();
+                return;
+              }
+              
+              this.errorMsg = errorMessage;
+            }
+          } catch (err) {
+            console.warn('Network error or server offline, trying local fallback authentication...', err);
+            this.localLoginFallback();
+          } finally {
+            this.loading = false;
+          }
+        },
+        localLoginFallback() {
+          const fallbackUsers = [
+            { id: 1, name: "Admin User", role: "Administrador", status: "Activo", email: "admin@obispodairy.com", password: "admin123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcSnQrQ5pnPKfo4ASmtyif9pnTArxqW6D57jMNAI1OZrT3aHyj4TR-0f8KA0_ZS766n_9nl0kQfZUNyQB8JTEUS1ZLo0SXHF29-p7ttfJRn2pwyAE3RBN0n4UodadbGH_bGS1fDMc_7NJyPkeOybCHd8OIjUX_uCmRHBWlcgvpTqv8durYfuWtoyJtiVkcF1EPwONiG_F34liZA5ptQ83TaZmgI6lgcPlwizpLfbp1yamU6mK7a3LXsi8H5rP4_EHBs3dza0xFBWE" },
+            { id: 2, name: "Dra. Maria Mendoza", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "vet123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
+            { id: 3, name: "Jose Sanchez", role: "Operario", status: "Inactivo", email: "jose@obispodairy.com", password: "ope123", avatar: "JS" },
+            { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" }
+          ];
+
+          let usersList = fallbackUsers;
+          const storedUsers = localStorage.getItem('localUsersData');
+          if (storedUsers) {
+            try {
+              usersList = JSON.parse(storedUsers);
+            } catch (e) {
+              console.error(e);
+            }
+          }
+
+          const user = usersList.find(u => u.email === this.email && u.password === this.password);
+          if (user) {
+            if (user.status !== 'Activo') {
+              this.errorMsg = "Su cuenta ha sido desactivada. Por favor comuníquese con el admin.";
+            } else {
+              localStorage.setItem('loggedInUser', JSON.stringify(user));
+              window.location.href = 'index.html';
+            }
+          } else {
+            this.errorMsg = "Credenciales incorrectas (Modo Local)";
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

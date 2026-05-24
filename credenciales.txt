@@ -1,0 +1,45 @@
+================================================================================
+                OBISPO LÁCTEO - CREDENCIALES DE ACCESO AL SISTEMA
+================================================================================
+
+Utilice las siguientes cuentas registradas en el sistema para iniciar sesión.
+Estas credenciales funcionan tanto en el Modo Servidor (Node.js) como en el
+Modo Cliente Local / Offline (file://).
+
+--------------------------------------------------------------------------------
+1. PERFIL: ADMINISTRADOR
+--------------------------------------------------------------------------------
+- Nombre: Admin User
+- Correo Electrónico: admin@obispodairy.com
+- Contraseña: admin123
+- Estado: Activo
+- Permisos: Acceso total al sistema y gestión de cuentas.
+
+--------------------------------------------------------------------------------
+2. PERFIL: VETERINARIO
+--------------------------------------------------------------------------------
+- Nombre: Dra. Maria Mendoza
+- Correo Electrónico: veterinario@obispodairy.com
+- Contraseña: vet123
+- Estado: Activo
+- Permisos: Gestión de salud animal, ficha clínica veterinaria y stock de insumos.
+
+--------------------------------------------------------------------------------
+3. PERFIL: OPERARIO (Activo)
+--------------------------------------------------------------------------------
+- Nombre: Ana Valero
+- Correo Electrónico: ana@obispodairy.com
+- Contraseña: ope123
+- Estado: Activo
+- Permisos: Ingreso de registros de ordeño, vista de fincas y stock de alimentos.
+
+--------------------------------------------------------------------------------
+4. PERFIL: OPERARIO (Inactivo)
+--------------------------------------------------------------------------------
+- Nombre: Jose Sanchez
+- Correo Electrónico: jose@obispodairy.com
+- Contraseña: ope123
+- Estado: Inactivo (Desactivado por motivos de seguridad)
+- NOTA: Si intenta ingresar con esta cuenta, el sistema le bloqueará el acceso
+  e indicará que su cuenta está desactivada. Puede ser reactivada por el Admin.
+================================================================================

@@ -1,0 +1,245 @@
+================================================================================
+                    OBISPO LÁCTEO - DOCUMENTACIÓN DETALLADA DEL SISTEMA
+================================================================================
+
+1. ¿QUÉ ES EL SISTEMA "OBISPO LÁCTEO"?
+--------------------------------------------------------------------------------
+Obispo Lácteo es una plataforma de software web moderna, integrada y de alto 
+rendimiento, diseñada específicamente para la digitalización, control, 
+monitoreo y optimización de la producción lechera y la sanidad del rebaño 
+bovino en el Municipio Obispo, Estado Barinas, Venezuela.
+
+La plataforma centraliza la información recopilada en campo por los operarios 
+y veterinarios, permitiendo a los administradores y ganaderos municipales 
+analizar en tiempo real el rendimiento productivo global e individual. Con 
+este sistema se eliminan los registros manuales en papel propensos a pérdidas 
+e inconsistencias, facilitando la toma de decisiones basada en datos reales 
+sobre la producción diaria de leche, el control de medicamentos en stock y el 
+historial clínico del rebaño.
+
+
+2. ARQUITECTURA Y FLUJO DE FUNCIONAMIENTO DEL SISTEMA
+--------------------------------------------------------------------------------
+El sistema opera bajo dos modos de ejecución alternativos transparentes:
+
+A. Modo Servidor Local (Node.js & Express):
+   El backend se ejecuta en una terminal del servidor local. La persistencia de
+   datos se gestiona en un archivo JSON en disco ('db.json'). Las vistas consumen
+   los endpoints HTTP REST y las actualizaciones son accesibles por múltiples
+   dispositivos conectados a la red local.
+
+B. Modo Cliente Local / Offline (Sin Servidor Node):
+   La plataforma cuenta con un archivo lanzador en la raíz ('sistema_web.html').
+   Al abrirlo mediante doble clic, el sistema se ejecuta bajo el protocolo
+   'file://' directamente en el navegador sin necesidad de iniciar Node.js.
+   Las peticiones a la API son interceptadas de forma transparente por un script
+   mock de base de datos local ('local-db-fallback.js') que lee y escribe
+   todos los datos en el almacenamiento local del cliente (LocalStorage). Esto
+   permite utilizar todas las pantallas de forma 100% offline y persistir los
+   cambios.
+
+Estructura de capas:
+
+- Capa de Presentación (Frontend - Cliente):
+  Ejecutada por completo en el navegador web del usuario. Utiliza tecnologías 
+  estándar sin necesidad de precompiladores complejos, permitiendo que la 
+  interfaz se cargue al instante y sea reactiva. Se comunica con el backend 
+  asíncronamente mediante peticiones HTTP estructuradas o su mock local.
+
+- Capa de Datos y Persistencia:
+  - En Modo Servidor: El archivo JSON local ('db.json') almacena y actualiza
+    de forma segura todos los módulos.
+  - En Modo Offline: El espacio de almacenamiento 'obispo_local_db' de
+    LocalStorage de HTML5 encapsula e inicializa los mismos datos del rebaño.
+
+
+3. DESGLOSE DETALLADO DE LAS TECNOLOGÍAS UTILIZADAS (DESDE LAS MÁS MÍNIMAS)
+--------------------------------------------------------------------------------
+
+A. TECNOLOGÍAS DEL FRONTEND (INTERFAZ DE USUARIO):
+
+   1. HTML5 (HyperText Markup Language - Estructura Semántica):
+      - Estructuración lógica del contenido mediante etiquetas semánticas modernas
+        como `<header>` (barra superior de la aplicación), `<aside>` (menú de 
+        navegación lateral), `<main>` (contenedor de vistas), `<section>` (bloques 
+        de datos autocontenidos), `<nav>` (menú móvil inferior y lateral), 
+        `<table>` (visualización de registros históricos) y `<form>` (captura 
+        validada de datos).
+      - Integración de controles interactivos nativos como `<input type="radio">` 
+        personalizados para turnos de ordeño, `<select>` dinámicos enlazados al 
+        estado del rebaño y `<input type="file">` ocultos con disparadores en 
+        JS para subir imágenes codificadas.
+
+   2. CSS3 (Cascading Style Sheets - Diseño y Animación):
+      - Grid Layout y Flexbox: Control de posicionamiento bidimensional y 
+        unidimensional para estructurar el panel Bento y las tablas responsivas.
+      - Variables CSS (Custom Properties): Definición de paletas de colores 
+        personalizadas del sistema de diseño (Deep Space y Emerald).
+      - Animaciones y Micro-interacciones: Transiciones suaves en hover (`transition: 
+        all 0.2s ease-in-out`), animaciones de pulsación (`active:scale-95`), 
+        rotación en íconos de carga, y efectos de escalado en cards y botones.
+      - Personalización de barras de desplazamiento (`custom-scrollbar`) mediante
+        pseudo-elementos como `::-webkit-scrollbar` para mantener la estética.
+      - Filtros de desenfoque (`backdrop-filter: blur(12px)`) aplicados a los 
+        fondos transparentes para lograr el estilo visual de glassmorphism.
+
+   3. Tailwind CSS (Utility-First CSS Framework - v3 via CDN):
+      - Usado para la aplicación rápida de propiedades visuales consistentes 
+        mediante clases utilitarias predefinidas.
+      - Plugins activos: `forms` (estilización uniforme de campos de entrada) y 
+        `container-queries` (diseño adaptativo basado en el tamaño del contenedor).
+      - Clases de tipografía (`text-headline-md`, `font-bold`), espaciado (`p-md`, 
+        `gap-sm`), bordes (`border-outline-variant`), y adaptabilidad en pantallas
+        móviles y escritorio mediante prefijos de breakpoint (`md:`, `lg:`).
+
+   4. Vue.js 3 (Progressive JavaScript Framework - Importado via CDN):
+      - Reactividad: Uso del modelo reactivo mediante el método `data()` para 
+        sincronizar el estado del frontend con el DOM en tiempo real.
+      - Directivas de Control:
+        * `v-if`, `v-else-if`, `v-else` para la representación condicional de 
+          bloques (como los paneles de control personalizados según el rol).
+        * `v-for` para renderizar colecciones de datos (listado de animales, 
+          historial de ordeños, inventario, usuarios).
+        * `v-model` para el enlace bidireccional (two-way data binding) en 
+          los formularios de registro.
+        * `v-on` (o `@`) para escuchar y gestionar eventos del DOM (click, 
+          submit, change).
+        * `v-bind` (o `:`) para enlazar atributos HTML (como `:class` para cambiar 
+          el estado visual o el tema de un botón).
+      - Computed Properties (Propiedades Computadas):
+        * `filteredAnimals` en `salud.html` para filtrar vacas reactivamente 
+          por término de búsqueda (raza, ID) y estado.
+        * `feedItems`, `medicineItems`, y `hygieneItems` en `inventario.html` 
+          para organizar los artículos de stock reactivamente según su categoría.
+      - Ciclo de Vida: Implementación del método `mounted()` para disparar la 
+        recuperación inicial de datos desde las APIs tan pronto como el DOM está listo.
+      - Métodos Auxiliares: Uso de `this.$nextTick()` para esperar actualizaciones 
+        del DOM antes de disparar animaciones del gráfico de barras de producción.
+
+   5. Material Symbols Outlined (Biblioteca de Iconos vectoriales de Google):
+      - Sistema de tipografía de iconos vectoriales que utiliza ligaduras de texto 
+        (ej. `agriculture`, `water_drop`, `logout`, `inventory_2`, `health_and_safety`).
+      - Ajuste preciso mediante configuraciones CSS de variación de fuente: 
+        `font-variation-settings: 'FILL' [0/1], 'wght' 400, 'GRAD' 0, 'opsz' 24`.
+
+   6. Fuentes Google Fonts (Tipografías Inter, Outfit, Hanken Grotesk y Work Sans):
+      - Importación y aplicación tipográfica. `Work Sans` se utiliza para títulos y 
+        cabeceras destacadas (`h1`, `h2`, `h3`), mientras que `Hanken Grotesk` se 
+        emplea para el cuerpo de texto, descripciones y tablas de datos tabulares 
+        por su alta legibilidad.
+
+   7. Fetch API (Comunicación HTTP Nativa del Navegador):
+      - Realiza solicitudes asíncronas AJAX (GET, POST, PUT, DELETE) hacia los 
+        endpoints REST del servidor backend.
+      - Manejo del formato JSON tanto para el envío de datos en la cabecera 
+        `Content-Type: application/json` como para el procesamiento de respuestas.
+
+   8. LocalStorage (Persistencia en el Lado del Cliente):
+      - Almacenamiento clave-valor local en el navegador del usuario para:
+        * `theme`: Recuerda si el usuario activó el Modo Claro ('light') o el 
+          Modo Oscuro ('dark') entre recargas de página y sesiones.
+        * `loggedInUser`: Guarda el objeto de sesión del usuario autenticado (ID, 
+          nombre, correo, rol, avatar) para validar su sesión activa.
+
+B. TECNOLOGÍAS DEL BACKEND (SERVIDOR Y PERSISTENCIA):
+
+   1. Node.js (Entorno de Ejecución JavaScript en el Servidor):
+      - Motor de ejecución en tiempo real basado en V8, encargado de alojar 
+        el backend de la aplicación web y escuchar peticiones de red.
+
+   2. Express.js (Framework Web de Node.js):
+      - Enrutamiento: Define los manejadores para las rutas HTTP (API REST) y los 
+        parámetros dinámicos en URLs (ej. `/api/users/:id`).
+      - Middlewares Integrados:
+        * `express.json()`: Middleware que analiza los cuerpos de las solicitudes 
+          entrantes con cargas JSON, mapeando los datos en `req.body`.
+        * `express.static()`: Sirve de forma eficiente todos los archivos de la 
+          carpeta `public/` (HTML, scripts del cliente, estilos CSS).
+      - Configuración CORS implícita para desarrollo en la red local.
+
+   3. Node fs Module (File System API - Acceso a Archivos):
+      - Módulo nativo de Node.js utilizado para interactuar de forma directa con 
+        el almacenamiento del servidor.
+      - Métodos específicos:
+        * `fs.existsSync(path)`: Verifica si el archivo `db.json` existe en el disco.
+        * `fs.readFileSync(path, 'utf8')`: Operación síncrona para leer el 
+          archivo de base de datos JSON en disco.
+        * `fs.writeFileSync(path, data)`: Operación síncrona para escribir y 
+          persistir el estado completo actualizado de la base de datos a `db.json`.
+
+   4. Node path Module (Mapeador de Rutas del Sistema):
+      - Módulo de utilidades para el manejo de rutas de archivos y directorios del 
+        sistema de archivos local.
+      - Método `path.join(__dirname, ...)` utilizado para resolver rutas 
+        absolutas del servidor independientemente del sistema operativo (Windows/Linux).
+
+   5. JSON (JavaScript Object Notation - Base de Datos Documental):
+      - El archivo `db.json` actúa como la base de datos principal estructurada en 
+        las siguientes colecciones primarias:
+        * `users`: Registra los perfiles de usuario (ID, nombre, rol, estatus, 
+          correo, clave, avatar).
+        * `inventory`: Insumos y recursos del stock (ID, nombre, categoría, 
+          cantidad, unidad, nivel de stock).
+        * `units`: Unidades de producción pecuaria / fincas (ID, nombre, dueño, 
+          cantidad de animales, producción promedio, estatus, imagen).
+        * `milkingRecords`: Registros históricos de producción de leche por lote 
+          (ID, unidad, litros, turno, hora, estatus, fecha).
+        * `animals`: Ficha del rebaño bovino individual (ID, nombre, raza, edad, 
+          peso, estatus clínico, litros totales, última vacuna, notas de texto).
+        * `healthEvents`: Historial de consultas médicas, partos y vacunas (ID, 
+          ID de vaca, tipo, detalles, veterinario, fecha).
+        * `checkups`: Calendario preventivo sanitario de chequeos programados.
+
+
+4. MÓDULOS DEL SISTEMA Y FLUJOS OPERATIVOS
+--------------------------------------------------------------------------------
+El sistema Obispo Lácteo se organiza en los siguientes módulos integrados:
+
+A. Módulo de Autenticación y Control de Accesos:
+   Valida el correo y contraseña contra la base de datos local en el endpoint 
+   `/api/login`. Si el usuario no está marcado como "Activo", se le prohíbe el 
+   ingreso. Al entrar, el cliente almacena la sesión y redirige al usuario según 
+   su rol (los Veterinarios a salud animal, los Operarios a ordeño, y los 
+   Administradores al dashboard). Todos los archivos HTML contienen un script de 
+   guardia en el ciclo `mounted()` que redirige a `login.html` si no hay sesión.
+
+B. Módulo de Dashboard Bento (index.html):
+   Presenta tres vistas de panel de control totalmente adaptadas según el rol del 
+   usuario autenticado, consumiendo los endpoints de resumen de salud o de 
+   producción.
+
+C. Módulo de Registro de Ordeño (ordeno.html):
+   Permite ingresar los litros de leche obtenidos por finca en cada turno. La 
+   cantidad ingresada actualiza la base de datos de registros y añade la suma 
+   de forma directa al indicador de "producción diaria" de la finca en `db.json`.
+
+D. Módulo de Gestión de Unidades Pecuarias (unidades.html):
+   Permite el registro físico de nuevas fincas del municipio, almacenando su 
+   propietario, coordenadas visuales (URL de imagen) y número de cabezas de ganado.
+
+E. Módulo de Control de Inventario (inventario.html):
+   Lleva el control de existencias de insumos críticos. Dispara de forma 
+   automática estados visuales de alerta: "CRÍTICO" (0 unidades) o "BAJO" 
+   (<50 unidades), notificando de forma inmediata en los dashboards de los 
+   usuarios.
+
+F. Módulo de Salud Animal e Historial Clínico (salud.html / historial.html):
+   Permite el seguimiento individualizado de cada animal del rebaño. Los 
+   veterinarios pueden filtrar por estado clínico, buscar vacas por ID, 
+   registrar tratamientos, partos o vacunas e ir al historial clínico individual 
+   para modificar las notas de seguimiento y visualizar la línea de tiempo.
+
+G. Módulo de Reportes de Producción Lechera (reportes.html):
+   Analítica avanzada para administradores. Calcula totales mensuales, 
+   promedios por vaca y proyecciones de crecimiento. Rendea barras dinámicas 
+   con alturas proporcionales basadas en la producción y expone un ranking 
+   interactivo de las UPP más eficientes del municipio con porcentaje de 
+   rendimiento comparado con el líder.
+
+H. Módulo de Gestión de Usuarios y Seguridad (usuarios.html):
+   Permite al Administrador dar de alta nuevos usuarios, editar perfiles y 
+   desactivar cuentas de inmediato (bloqueando su inicio de sesión y forzando la 
+   desconexión automática del usuario en su próxima interacción). Para operarios 
+   y veterinarios, este módulo funciona como un panel de configuración de su 
+   cuenta personal (permitiendo cambiar nombre, email, clave o subir un avatar).
+================================================================================

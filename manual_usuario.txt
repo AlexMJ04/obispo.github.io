@@ -1,0 +1,393 @@
+================================================================================
+                     OBISPO LÁCTEO - MANUAL OFICIAL DE USUARIO
+================================================================================
+
+Este manual contiene las instrucciones detalladas paso a paso para el uso de la
+plataforma web Obispo Lácteo. Utilice este documento para comprender el
+funcionamiento preciso de cada pantalla, tabla, formulario, botón e interactivo
+del sistema. El manual está estructurado estrictamente según lo que se encuentra
+implementado en el código real de la aplicación.
+
+
+================================================================================
+SECCIÓN 0: INICIO Y EJECUCIÓN DE LA PLATAFORMA (MODO ONLINE Y OFFLINE)
+================================================================================
+El sistema Obispo Lácteo puede iniciarse de dos formas independientes según su 
+entorno y necesidades:
+
+1. MODO OFFLINE (RECOMENDADO PARA USO LOCAL SIN SERVIDORES):
+   - Diríjase a la carpeta raíz del proyecto ('obispo_dairy_system').
+   - Ubique el archivo 'sistema_web.html'.
+   - Haga doble clic sobre él. Se abrirá automáticamente en su navegador web 
+     predeterminado y le redirigirá a la pantalla de inicio de sesión.
+   - En este modo, no requiere ejecutar el servidor Node.js ni la terminal.
+     Toda la lógica de almacenamiento funciona a través del LocalStorage del 
+     navegador de manera 100% offline y local.
+
+2. MODO SERVIDOR LOCAL (RELAJACIÓN MULTIDISPOSITIVO):
+   - Abra una consola de comandos en la carpeta del proyecto.
+   - Inicie el servidor ejecutando el comando: node server.js.
+   - Abra su navegador e ingrese a la dirección: http://localhost:3000.
+   - Este modo es necesario si desea que múltiples dispositivos (teléfonos, 
+     tabletas u otras computadoras) en la misma red local accedan al sistema.
+
+
+================================================================================
+SECCIÓN 1: CONTROLES DE ACCESO Y SEGURIDAD POR ROL DE USUARIO
+================================================================================
+El sistema implementa un control de acceso estricto basado en roles para
+proteger la integridad de la información. Al iniciar sesión, las pantallas y 
+vistas se adaptan dinámicamente según el rol del usuario:
+
+1. ADMINISTRADOR:
+   - Rol con control total sobre el sistema.
+   - Es el único rol capacitado para ver, agregar, editar y desactivar usuarios
+     en la plataforma (Gestión de Cuentas).
+   - Acceso completo a todas las pantallas: Panel de Control (Admin), Registro
+     de Ordeño, Gestión de Fincas, Control de Inventario (Completo), Salud
+     Animal, Historial Clínico de vacas y Reportes analíticos de producción.
+
+2. VETERINARIO:
+   - Rol especializado en el área médica y de salud animal.
+   - Pantallas accesibles: Panel de Control (Veterinario), Salud Animal, 
+     Historial Clínico de vacas, Control de Inventario (Ver y actualizar stock
+     de medicamentos, alimentos e higiene) y Perfil personal.
+   - Restricciones: No tiene acceso al módulo de Reportes de Producción, ni a 
+     la creación de nuevas fincas, ni a la gestión de otros usuarios. Si intenta
+     acceder manualmente a Reportes, el sistema lo redirige de inmediato a 
+     su panel sanitario en Salud Animal.
+
+3. OPERARIO:
+   - Rol técnico enfocado en las tareas diarias de ordeño y recolección.
+   - Pantallas accesibles: Panel de Control (Operario), Registro de Ordeño, 
+     Gestión de Fincas (solo vista), Control de Inventario (Ver y ajustar stock) 
+     y Perfil personal.
+   - Restricciones: No tiene acceso a los Reportes analíticos de producción, 
+     al registro de eventos médicos o clínicos en Salud Animal, ni a la gestión 
+     de cuentas. Si intenta forzar la navegación a páginas restringidas, es 
+     redirigido automáticamente a la pantalla de Ordeño.
+
+
+================================================================================
+SECCIÓN 2: DESCRIPCIÓN DETALLADA DE PANTALLAS Y ELEMENTOS INTERACTIVOS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. PANTALLA DE INICIO DE SESIÓN (login.html)
+--------------------------------------------------------------------------------
+Es la puerta de entrada a la plataforma. Cuenta con un diseño responsivo.
+
+* Campos de entrada de datos:
+  - Correo Electrónico (Campo de texto tipo email): Ingrese la dirección de 
+    correo institucional registrada en el sistema (ej. admin@obispodairy.com).
+  - Contraseña (Campo de texto oculto por defecto): Ingrese su clave de acceso.
+
+* Botones y elementos interactivos:
+  - Botón de Ojo (dentro del campo Contraseña): Permite alternar la visibilidad
+    de los caracteres ingresados entre texto legible y puntos de enmascaramiento.
+  - Ingresar al Sistema (Botón grande color verde): Envía la solicitud de 
+    autenticación al servidor. Muestra un icono de carga giratorio y se deshabilita
+    temporalmente para evitar envíos múltiples mientras procesa la validación.
+  - Interruptor de Tema Sol/Luna (Superior derecho): Botón flotante que cambia 
+    instantáneamente el diseño de la pantalla de inicio entre Modo Claro y 
+    Modo Oscuro, guardando la preferencia en el LocalStorage.
+  - Banner de Alerta (Cabecera): Aparece únicamente si hay un error en las 
+    credenciales ("Credenciales incorrectas") o si el perfil está bloqueado 
+    ("Su cuenta ha sido desactivada...").
+
+--------------------------------------------------------------------------------
+2. BARRA DE NAVEGACIÓN LATERAL (SIDEBAR) Y BARRA SUPERIOR (HEADER)
+--------------------------------------------------------------------------------
+Panel de navegación principal común a todas las pantallas tras iniciar sesión.
+
+* Barra Superior (Header):
+  - Botón de Menú (Icono de tractor/agricultura, superior izquierdo): Contrae y 
+    despliega lateralmente la barra de navegación para optimizar el espacio.
+  - Título "Obispo Lácteo": Enlace que redirige a la pantalla de Inicio.
+  - Botón Sol/Luna (Icono de luz/oscuridad): Alterna el tema visual de toda la 
+    plataforma (Modo Claro / Modo Oscuro) de forma inmediata.
+  - Botón de Salida (Icono de puerta con flecha): Cierra la sesión activa, 
+    elimina los datos de autenticación de la caché local y redirige a login.html.
+  - Enlace de Perfil (Avatar circular derecho): Muestra la foto de perfil o las 
+    iniciales del usuario e interactúa como enlace directo a usuarios.html.
+
+* Menú Lateral (Sidebar):
+  - Enlaces de navegación con iconos vectoriales dinámicos que se marcan en 
+    verde brillante y texto en negrita al estar en la página activa:
+    * Inicio: Enlace a index.html.
+    * Ordeño: Enlace a ordeno.html (Solo Admin y Operario).
+    * Fincas: Enlace a unidades.html (Solo Admin y Operario).
+    * Stock: Enlace a inventario.html (Todos los roles).
+    * Salud: Enlace a salud.html (Solo Admin y Veterinario).
+    * Reportes: Enlace a reportes.html (Solo Administrador).
+    * Perfil: Enlace a usuarios.html (Todos los roles).
+  - Tarjeta de Usuario (Inferior izquierda, visible cuando el sidebar está expandido):
+    * Muestra la foto del usuario autenticado, su nombre completo y su rol.
+    * Botón de Engranaje (Configurar): Redirige directamente a usuarios.html.
+    * Botón de Salir (Icono de apagado): Cierra la sesión activa del usuario.
+
+* Barra de Navegación Móvil (BottomNavBar - visible únicamente en pantallas móviles):
+  - Fila de accesos directos táctiles en la base de la pantalla adaptada por rol:
+    * Inicio, Ordeño, Fincas, Stock, Salud, Reportes, Perfil.
+
+--------------------------------------------------------------------------------
+3. PANEL DE CONTROL / DASHBOARD (index.html)
+--------------------------------------------------------------------------------
+Muestra resúmenes analíticos adaptados según el rol del usuario que ha ingresado:
+
+A. VISTA DE ADMINISTRADOR:
+   - Tarjeta "Producción Total Hoy" (Columna doble): Muestra los litros totales 
+     registrados en el día actual con un gráfico SVG de línea de tendencia y 
+     el indicador porcentual de variación diaria (+4.2% vs ayer).
+   - Tarjeta "Unidades Activas" (Verde esmeralda): Muestra el número de fincas 
+     activas en producción en Obispo. Al presionarla, abre unidades.html.
+   - Tarjeta "Alertas de Stock" (Borde rojo): Expone el número de insumos en 
+     estado crítico (cantidad en 0). Contiene el botón "Ver Inventario" que 
+     redirige directamente a inventario.html.
+   - Tabla "Detalle de Ordeño por Unidad" (Sección central de actividad): Lista 
+     los últimos 5 registros de ordeño con columnas de Unidad, Turno/Hora, 
+     Cantidad y Estado (con etiquetas "VERIFICADO" en verde o "PENDIENTE" en rojo).
+     * Enlace "Registrar" (Esquina de la cabecera): Redirige a ordeno.html.
+   - Tarjeta "Salud del Rebaño" (Barra de progreso circular): Muestra el 
+     porcentaje global de vacas saludables y una barra horizontal animada.
+     * Botón "Bitácora Veterinaria" (Esquina inferior): Redirige a salud.html.
+
+B. VISTA DE VETERINARIO:
+   - Tarjeta "Salud del Rebaño" (Centralizada): Porcentaje y barra de progreso.
+   - Tarjeta "En Tratamiento": Contador de vacas enfermas en tratamiento. Abre 
+     la lista filtrada en salud.html al hacer clic.
+   - Tarjeta "Bajo Observación": Contador de vacas bajo cuidado especial. Abre 
+     la lista filtrada en salud.html al hacer clic.
+   - Tarjeta "Próximos Controles": Tarjeta verde con el conteo de chequeos 
+     agendados (fijo "03 controles" con icono de vacunas).
+   - Lista "Controles Sanitarios Pendientes" (Lado izquierdo): Checklist interactivo 
+     de tareas preventivas (vacunaciones, controles de mastitis, chequeos prenatales).
+     * Casillas de verificación (Checkboxes): Al marcarlas, tachan el texto de 
+       la tarea, bajan su opacidad y cambian su etiqueta de prioridad a "Completado".
+   - Tabla "Historial de Eventos de Salud" (Lado derecho): Registros médicos 
+     recientes con fecha, animal, tipo de consulta y detalles del diagnóstico.
+     * Enlace "Ver Todos" (Cabecera): Redirige a la bitácora en salud.html.
+
+C. VISTA DE OPERARIO:
+   - Tarjeta "Producción Total Hoy": Litros diarios totales con su línea SVG.
+   - Tarjeta "Fincas Activas": Número de fincas en producción con enlace.
+   - Tarjeta "Estado de Stock": Conteo de insumos en nivel crítico de inventario.
+   - Tabla "Últimos Registros de Ordeño": Muestra los registros ingresados hoy 
+     con opción de visualización rápida.
+   - Tarjeta "Acceso Rápido" (Panel lateral): Ofrece dos accesos grandes:
+     * Botón "Registrar Ordeño" (Redirige a ordeno.html).
+     * Botón "Gestionar Fincas" (Redirige a unidades.html).
+   - Grid "Producción y Animales por Finca": Lista cada finca registrada con 
+     imagen, nombre, dueño, y datos en tiempo real de litros hoy y cabezas de ganado.
+     * Enlace "Ver Detalles" (Cabecera): Redirige a unidades.html.
+
+--------------------------------------------------------------------------------
+4. REGISTRO DE ORDEÑO (ordeno.html)
+--------------------------------------------------------------------------------
+Módulo diseñado para la recolección física y control diario de litros de leche.
+
+* Formulario de Registro de Ordeño (Sección Izquierda):
+  - Selector "Unidad Agropecuaria" (Menú desplegable): Muestra las fincas 
+    disponibles en el sistema para asociar la recolección.
+  - Campo "Cantidad de Litros" (Entrada numérica con decimales): Ingrese los 
+    litros de leche obtenidos en el lote. Muestra "LT" como sufijo visual.
+  - Botones "Turno de Ordeño" (Grupo interactivo de selección única):
+    * Botón "Mañana" (Icono de Sol): Asigna el registro al turno matutino.
+    * Botón "Tarde" (Icono de Nube con sol): Asigna el registro al turno vespertino.
+    (El turno seleccionado se ilumina con fondo verde esmeralda).
+  - Botón "Guardar Registro" (Con icono de disquete): Envía los datos. Se 
+    deshabilita con un icono giratorio de "Guardando..." para evitar duplicados.
+
+* Lista de Últimos Registros Hoy (Sección Derecha):
+  - Contador de registros activos en la cabecera.
+  - Lista de tarjetas de ordeño del día, con nombre del lote, litros, hora, 
+    turno y etiqueta de estado ("VERIFICADO" en verde o "PENDIENTE" en gris).
+  - Estado vacío: Si no hay ordeños registrados en el día, muestra un mensaje
+    inclinado ("No hay registros guardados hoy.").
+  - Botón "Ver historial completo" (Visible ÚNICAMENTE para Administrador):
+    * Enlace directo a reportes.html para ver la tabla histórica completa.
+
+--------------------------------------------------------------------------------
+5. GESTIÓN DE FINCAS (unidades.html)
+--------------------------------------------------------------------------------
+Inventario geográfico y de infraestructura de las fincas y UPPs.
+
+* Botón "Registrar Nueva Unidad" (Cabecera superior):
+  - Abre un modal flotante con los campos: Nombre de la Finca, Propietario, 
+    Cabezas de Ganado (número entero) y URL de la Imagen de la finca.
+  - Botón "Cancelar" (Cierra el modal sin guardar).
+  - Botón "Registrar" (Inserta la nueva finca, la renderiza y cierra el modal).
+
+* Grid de Fincas Registradas:
+  - Despliega las tarjetas de fincas. Si no tienen URL de imagen válida, 
+    muestra un icono de casa de campo predeterminado.
+  - Muestra nombre, dueño, cantidad de animales y producción de hoy en litros.
+  - Etiqueta de Estado: "Activa" (Fondo verde) o "Revisión" (Fondo naranja).
+
+--------------------------------------------------------------------------------
+6. CONTROL DE INVENTARIO (inventario.html)
+--------------------------------------------------------------------------------
+Monitoreo de existencias de concentrados, vacunas e higiene en stock.
+
+* Barra de Filtros Rápidos (Bento Stats - Interactivos):
+  - Tarjeta "TOTAL ITEMS": Muestra el total de insumos creados. Al hacer clic, 
+    reinicia cualquier filtro de búsqueda.
+  - Tarjeta "CRÍTICO" (Roja): Muestra la cantidad de insumos agotados (stock 0). 
+    Al presionarla, filtra las tablas para mostrar solo insumos en "CRÍTICO".
+  - Tarjeta "BAJO" (Naranja): Muestra los insumos con stock menor a 50 unidades. 
+    Al presionarla, filtra las tablas para mostrar solo insumos en "BAJO".
+  - Tarjeta "PRÓXIMA ENTREGA": Indica de forma estática la fecha de suministro.
+
+* Botones de Adición de Insumos:
+  - Botón "Nuevo Item" (Superior derecho, visible en escritorio): Abre el modal.
+  - Botón Flotante "+" (Esquina inferior derecha, visible en móvil): Abre el modal.
+  - Modal "Nuevo Artículo de Inventario" contiene los campos:
+    * Nombre del Producto (ej. Concentrado Lechero).
+    * Categoría (Selector: Alimento y Nutrición, Medicamentos y Salud, Higiene).
+    * Stock Inicial (Numérico).
+    * Unidad (Texto, ej: kg, galones, frascos).
+    * Botones: Cancelar y Guardar.
+
+* Tablas de Categorías de Inventario:
+  - Alimento y Nutrición (Ícono de pasto/hierba).
+  - Medicamentos y Salud (Ícono de vacuna).
+  - Suministros de Higiene (Ícono de sellador/desinfectante).
+  - Columnas: Producto, Stock Actual, Estado (OK, BAJO, CRÍTICO) y Acciones.
+  - Botón "Ajustar Stock" (Columna Acciones):
+    * Al presionarlo, despliega un cuadro de diálogo del navegador (prompt) que
+      pregunta: "Ingrese el nuevo stock para [Producto]". Al ingresar un número
+      válido, actualiza la cantidad en la tabla y recalculación automática del
+      estado del insumo.
+
+--------------------------------------------------------------------------------
+7. SALUD ANIMAL / BITÁCORA VETERINARIA (salud.html)
+--------------------------------------------------------------------------------
+Mapeo clínico veterinario de cada animal del rebaño.
+
+* Tarjetas de Filtro Superior (Bento Cards Interactivas):
+  - Permiten filtrar la tabla de animales de inmediato al hacer clic sobre ellas:
+    * Animales Saludables (Muestra conteo y filtra por "Saludable").
+    * En Tratamiento (Muestra conteo y filtra por "En Tratamiento").
+    * Bajo Observación (Muestra conteo y filtra por "Bajo Observación").
+    * Nacimientos (Mes) (Muestra conteo de terneros con edad menor a 1 año).
+
+* Sección "Próximos Chequeos" (Columna de la izquierda):
+  - Calendario con las tareas veterinarias planificadas en Obispo (vacunas, 
+    chequeos prenatales), indicando la fecha de vencimiento, título, objetivo 
+    y prioridad.
+
+* Sección "Fichas Veterinarias" (Columna de la derecha):
+  - Buscador "Buscar ID de animal o raza...": Campo de texto que filtra la tabla 
+    en tiempo real a medida que escribe.
+  - Tabla de Ganado: Columnas de ID/Nombre, Raza, Estado y Acciones.
+  - Enlaces directos a Historial Clínico: El ID (ej: L-402), el Nombre (ej: Clarabel) 
+    y el botón de flecha derecha (>) redirigen directamente a historial.html.
+
+* Botón Flotante "Registrar Evento" (Esquina inferior derecha):
+  - Abre el modal "Registrar Evento Veterinario" con los campos:
+    * Seleccionar Vaca (Dropdown con listado de vacas en db.json).
+    * Tipo de Evento (Dropdown: Vacunación, Tratamiento, Parto, Chequeo).
+    * Detalles del Evento (Dosis, vacunas, medicamentos, etc.).
+    * Veterinario (Nombre del médico a cargo, por defecto Dra. Mendoza).
+    * Cambiar Estado del Animal (Opciones: Saludable, Tratamiento, Observación).
+    * Botones: Cancelar y Guardar.
+
+--------------------------------------------------------------------------------
+8. EXPEDIENTE / HISTORIAL CLÍNICO INDIVIDUAL (historial.html)
+--------------------------------------------------------------------------------
+Hoja de vida médica detallada de una vaca seleccionada por su ID único.
+
+* Barra Superior:
+  - Enlace "Volver a Salud Animal" (Arriba a la izquierda): Regresa a salud.html.
+
+* Ficha del Animal (Columna Izquierda):
+  - Muestra la fotografía real de la vaca, nombre, ID de arete, raza, edad, peso 
+    en kilogramos, estado clínico actual, litros acumulados de por vida, estado 
+    de gestación/preñez, y fecha de la última vacunación registrada.
+
+* Notas del Caso (Columna Derecha):
+  - Cuadro de edición de texto con el historial médico y observaciones continuas.
+  - Botón "Guardar Notas": Guarda de inmediato los cambios del editor de texto. 
+    Se bloquea mostrando "Guardando..." con un spinner durante el envío.
+
+* Sección "Línea de Tiempo Sanitaria" (Parte Inferior):
+  - Registro cronológico vertical de visitas, partos o vacunas del animal.
+  - Muestra la fecha del evento, tipo de evento (con iconos de jeringa, maletín 
+    o cuna de bebé según corresponda), detalles clínicos y veterinario a cargo.
+
+* Botón Flotante "Registrar Evento" (Esquina inferior derecha):
+  - Abre el modal de registro médico pre-seleccionando la vaca en cuestión para
+    agilizar el ingreso de datos en el historial.
+
+--------------------------------------------------------------------------------
+9. REPORTES DE PRODUCCIÓN LECHERA (reportes.html)
+--------------------------------------------------------------------------------
+Módulo de analítica avanzada para el control financiero y operativo (Solo Admin).
+
+* Controles de Filtrado Superior:
+  - Selector de Fecha (Dropdown): Filtra los registros por el mes seleccionado.
+  - Selector de Unidad (Dropdown): Filtra los registros por finca/UPP.
+  - Botón "Compartir" (Icono de compartir): Copia el enlace del reporte al 
+    portapapeles y emite una alerta visual en pantalla.
+  - Botón "Exportar PDF" (Icono de impresora): Abre la ventana de impresión 
+    del navegador para guardar el reporte en formato digital PDF.
+
+* Tarjetas de Muestreo de Métricas (Hacer clic en ellas despliega un modal descriptivo):
+  - Total Litros Mensuales (Muestra la suma de litros obtenidos).
+  - Promedio por Vaca (Litros promedio diarios por cabeza).
+  - Proyección Próximo Mes (Estimado predictivo automático del 8% de aumento).
+
+* Gráfico "Producción Diaria (Litros)":
+  - Gráfico dinámico de barras verticales. Ajusta automáticamente la altura 
+    de cada barra verde en base a la producción diaria del mes. Al posicionar
+    el cursor en una barra, se produce un cambio de escala interactivo.
+
+* Ranking de Unidades de Producción (UPPs):
+  - Muestra la tabla de clasificación de fincas de Obispo ordenadas de mayor a
+    menor rendimiento real acumulado.
+  - Botón "Ver reporte detallado UPP" (Esquina inferior del ranking):
+    * Despliega un modal detallado que lista las fincas, su posición en el ranking, 
+      los litros acumulados, y una barra de progreso horizontal con el rendimiento 
+      porcentual comparativo respecto a la finca líder (100% de eficiencia).
+
+* Tabla "Histórico de Producción":
+  - Registro total de los ordeños ingresados en el sistema con columnas de 
+    Fecha, Unidad, Turno, Hora, Cantidad en Litros y Estado Verificado.
+  - Paginador (Inferior derecho): Botones de flecha izquierda/derecha para navegar.
+
+--------------------------------------------------------------------------------
+10. GESTIÓN DE USUARIOS Y PERFILES (usuarios.html)
+--------------------------------------------------------------------------------
+Pantalla de control administrativo de cuentas o de edición de perfil propio:
+
+A. INTERFAZ PARA VETERINARIOS Y OPERARIOS (Panel de Perfil Personal):
+   - Muestra una tarjeta centralizada de perfil que contiene:
+     * Avatar (Imagen cargada del usuario o iniciales en círculo verde).
+     * Nombre Completo, Cargo/Rol asignado, Correo Electrónico.
+     * Etiqueta "Sesión Activa" (Con luz verde parpadeante).
+   - Botón "Configurar Perfil" (settings): Abre el modal de edición de datos propios.
+   - Botón "Cerrar Sesión" (logout): Cierra la cuenta y redirige al login.
+
+B. INTERFAZ PARA ADMINISTRADORES (Módulo de Gestión de Cuentas):
+   - Mapea la lista completa de usuarios creados en la base de datos local.
+   - Tarjetas de Filtro Superior: Permiten filtrar la lista entre Administradores,
+     Veterinarios y Operarios al hacer clic.
+   - Buscador "Buscar usuarios por nombre o correo...": Filtra la tabla reactivamente.
+   - Tabla de Cuentas: Columnas de Usuario (Avatar/Nombre/Correo), Cargo, 
+     Estado y Acciones.
+     * Interruptor de Estado (Switch): Permite activar ("Activo" en verde) o 
+       desactivar ("Inactivo" en rojo) a un usuario. Si se marca como inactivo, 
+       se le expulsa de inmediato de su sesión activa y no podrá ingresar.
+     * Botón Editar (Lápiz en Acciones): Abre el modal "Editar Usuario" para 
+       cambiar nombre, correo, contraseña, rol o foto de cualquier usuario.
+   - Botón Flotante "+" (Esquina inferior derecha): Abre el modal "Agregar Nuevo 
+     Usuario" con campos de Nombre, Rol, Correo, Clave y Estado Inicial.
+
+* Modal de Configuración de Perfil / Edición de Datos (Común a todos los roles):
+  - Avatar circular editable: Al presionar el botón de lápiz sobre la imagen, 
+    abre el explorador de archivos nativo para subir una foto de perfil personalizada.
+  - Campos: Nombre Completo, Correo Electrónico y Nueva Contraseña (con botón 
+    ocular para revelar/ocultar caracteres).
+  - Botón "Limpiar" (Icono de escoba): Restablece los campos de texto del modal.
+  - Botón "Cancelar" y "Guardar Cambios".
+================================================================================

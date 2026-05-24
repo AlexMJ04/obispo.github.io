@@ -1,0 +1,273 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "role": "Administrador",
+      "status": "Activo",
+      "email": "admin@obispodairy.com",
+      "password": "admin123",
+      "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuCcSnQrQ5pnPKfo4ASmtyif9pnTArxqW6D57jMNAI1OZrT3aHyj4TR-0f8KA0_ZS766n_9nl0kQfZUNyQB8JTEUS1ZLo0SXHF29-p7ttfJRn2pwyAE3RBN0n4UodadbGH_bGS1fDMc_7NJyPkeOybCHd8OIjUX_uCmRHBWlcgvpTqv8durYfuWtoyJtiVkcF1EPwONiG_F34liZA5ptQ83TaZmgI6lgcPlwizpLfbp1yamU6mK7a3LXsi8H5rP4_EHBs3dza0xFBWE"
+    },
+    {
+      "id": 2,
+      "name": "Dra. Maria Mendoza",
+      "role": "Veterinario",
+      "status": "Activo",
+      "email": "veterinario@obispodairy.com",
+      "password": "veterinario1",
+      "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww"
+    },
+    {
+      "id": 3,
+      "name": "Jose Sanchez",
+      "role": "Operario",
+      "status": "Activo",
+      "email": "operador1@obispodairy.com",
+      "password": "operador1",
+      "avatar": "JS"
+    },
+    {
+      "id": 4,
+      "name": "Ana Valero",
+      "role": "Operario",
+      "status": "Activo",
+      "email": "operador2@obispodairy.com",
+      "password": "operador2",
+      "avatar": "AV"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Concentrado Lechero 22%",
+      "category": "feed",
+      "stock": 2450,
+      "unit": "kg",
+      "status": "OK"
+    },
+    {
+      "id": 2,
+      "name": "Sales Minerales Premium",
+      "category": "feed",
+      "stock": 45,
+      "unit": "kg",
+      "status": "BAJO"
+    },
+    {
+      "id": 3,
+      "name": "Vacuna Antiaftosa (Frasco 50 ds)",
+      "category": "medicine",
+      "stock": 2,
+      "unit": "unidades",
+      "status": "CRÍTICO"
+    },
+    {
+      "id": 4,
+      "name": "Antibiótico Oxitetraciclina",
+      "category": "medicine",
+      "stock": 12,
+      "unit": "frascos",
+      "status": "OK"
+    },
+    {
+      "id": 5,
+      "name": "Sellador de Pezones (Post-ordeño)",
+      "category": "hygiene",
+      "stock": 15,
+      "unit": "galones",
+      "status": "BAJO"
+    }
+  ],
+  "units": [
+    {
+      "id": 1,
+      "name": "Finca El Progreso",
+      "owner": "Carlos Rodriguez",
+      "animalCount": 124,
+      "productionToday": 1050,
+      "healthAvg": "Excelente",
+      "status": "Activa",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCiQj84qzExSTNZP9H_WPszqMEUQEn2D4g232SiZw_f6jJderu2YiED_j_YD7qRdXa86uHRTt00MvjdYqMYjAV2WkswqR_3t8YYZK6ohaO6J6SY8zZGpeq191anjsbExl-eS1G-IvTEgc6kz4ERvR0kw-dmC89849DSrlgfzlQOc86AoAp1xq653i5OhyS0c42UAWuF_TvZ-ufOM8mztT9b0MBx_w8_sAYlttHl00dREu_Atvpvc2tn848fgWzRXXC42vNODqFs0zc"
+    },
+    {
+      "id": 2,
+      "name": "Hato La Bendición",
+      "owner": "Maria Hernandez",
+      "animalCount": 86,
+      "productionToday": 520,
+      "healthAvg": "Observación",
+      "status": "Revisión",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBo0x6Srpgv2-bB9Lxgeaiew9ry2dzO5DEtRIMNJM-xeLTFt4iwgpCIU2V2fNUqozfpTUn0xluL0X7ADBFzNNIFRZw5fL_QdsDtqwlqIrXnyGJO_i0L0HptoKZaXgjweJ10Rp-vmqTsO7xHAgtJEGtq7xiee5ukZ5bgAb46kWpb7KEwtT6iLilqFlTfWy7e13kfTqTiNqCykC2DoKJSnGrlnXsHZ-AURS9PhWmBCo8QVqL3zhzKym4O5PrNTpCwuiE9CoiF1fFpNuo"
+    },
+    {
+      "id": 3,
+      "name": "Unidad Barinas I",
+      "owner": "Municipio Obispo",
+      "animalCount": 210,
+      "productionToday": 1450,
+      "healthAvg": "Excelente",
+      "status": "Activa",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDyoJBk67pMfvNC_TOuqCE0fKENi_YnS8PyuoIZbZzn9-WRIgfhrrIGBV9Qqmz52RbldmJwmWDHMH32NgPw8DM5nDsUbQAiLgwXONDLi3aAUqF6Sj3lGOKVIL1TqA_Bi-0yOrOwHxD78a_R_3NArwCKg6aTBB-6CUys2uX0dQhywQ_3MjavSCf0GkMY2wCn8-O8RoVKaO0EtTLQ4rcfQPHOF4yzJwv4ZxBsb5kseksppsWZVrBmQMapSrXkNaSu5CCMIu6CVE40zT8"
+    }
+  ],
+  "milkingRecords": [
+    {
+      "id": 6,
+      "unitName": "Finca El Progreso",
+      "liters": 200,
+      "shift": "Mañana",
+      "time": "10:26 AM",
+      "status": "VERIFICADO",
+      "date": "2026-05-24"
+    },
+    {
+      "id": 1,
+      "unitName": "Lote A - Potrero El Sol",
+      "liters": 45.5,
+      "shift": "Mañana",
+      "time": "06:45 AM",
+      "status": "VERIFICADO",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 2,
+      "unitName": "Lote B - Hacienda Barinas",
+      "liters": 32.8,
+      "shift": "Mañana",
+      "time": "07:12 AM",
+      "status": "VERIFICADO",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 3,
+      "unitName": "Lote C - Sector Las Palmas",
+      "liters": 28,
+      "shift": "Mañana",
+      "time": "07:45 AM",
+      "status": "VERIFICADO",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 4,
+      "unitName": "Lote A - Potrero El Sol",
+      "liters": 12.2,
+      "shift": "Mañana",
+      "time": "05:30 AM",
+      "status": "PENDIENTE",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 5,
+      "unitName": "Unidad 04 - Corral Central",
+      "liters": 56.1,
+      "shift": "Mañana",
+      "time": "05:15 AM",
+      "status": "VERIFICADO",
+      "date": "2026-05-23"
+    }
+  ],
+  "animals": [
+    {
+      "id": "L-402",
+      "name": "Clarabel",
+      "breed": "Holstein",
+      "age": 4.5,
+      "weight": 580,
+      "status": "Saludable",
+      "productionTotal": 12450,
+      "lastVaccination": "15 Oct 2023",
+      "pregnancyStatus": "Confirmado (3m)",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDwWqZ3Kx3XSv00tLgzLRl1uFvfESblhpZWXSfqyWFe3FvoJ6fl9Z8Nm41HUU9kPYt0PCupktRONGl02v690o4UstecWzEATEOuzGaihXjqXHpr1qlK3PcKyBiE2IgyqAz6c1IfzsWwDH26TKG3v8i6Av84BtmwyGn2_VM8NUXYPQr1JO7jIM7LK8lyUMFf17nAAguyl-Ejcjw-lO2NOnGsgU8qZqp8f8GmFJWYR2TPLRhSbgNAdHAKyivnZ6lUOZGymjqaW0AV9A8",
+      "notes": "Animal muestra excelente recuperación post-parto. Se recomienda mantener suplementación mineral tipo B hasta el próximo ciclo de ordeño. Observar pezón posterior izquierdo por sensibilidad mínima."
+    },
+    {
+      "id": "J-115",
+      "name": "Margarita",
+      "breed": "Jersey",
+      "age": 3,
+      "weight": 480,
+      "status": "En Tratamiento",
+      "productionTotal": 8900,
+      "lastVaccination": "20 Sep 2023",
+      "pregnancyStatus": "No preñada",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBo0x6Srpgv2-bB9Lxgeaiew9ry2dzO5DEtRIMNJM-xeLTFt4iwgpCIU2V2fNUqozfpTUn0xluL0X7ADBFzNNIFRZw5fL_QdsDtqwlqIrXnyGJO_i0L0HptoKZaXgjweJ10Rp-vmqTsO7xHAgtJEGtq7xiee5ukZ5bgAb46kWpb7KEwtT6iLilqFlTfWy7e13kfTqTiNqCykC2DoKJSnGrlnXsHZ-AURS9PhWmBCo8QVqL3zhzKym4O5PrNTpCwuiE9CoiF1fFpNuo",
+      "notes": "En tratamiento por mastitis leve en ubre anterior derecha."
+    },
+    {
+      "id": "G-089",
+      "name": "Estrella",
+      "breed": "Guernsey",
+      "age": 6,
+      "weight": 510,
+      "status": "Bajo Observación",
+      "productionTotal": 15400,
+      "lastVaccination": "05 Ago 2023",
+      "pregnancyStatus": "Confirmado (5m)",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDyoJBk67pMfvNC_TOuqCE0fKENi_YnS8PyuoIZbZzn9-WRIgfhrrIGBV9Qqmz52RbldmJwmWDHMH32NgPw8DM5nDsUbQAiLgwXONDLi3aAUqF6Sj3lGOKVIL1TqA_Bi-0yOrOwHxD78a_R_3NArwCKg6aTBB-6CUys2uX0dQhywQ_3MjavSCf0GkMY2wCn8-O8RoVKaO0EtTLQ4rcfQPHOF4yzJwv4ZxBsb5kseksppsWZVrBmQMapSrXkNaSu5CCMIu6CVE40zT8",
+      "notes": "Chequeo mensual de gestación y monitoreo de cojera leve."
+    },
+    {
+      "id": "L-521",
+      "name": "Blanca",
+      "breed": "Holstein",
+      "age": 2,
+      "weight": 530,
+      "status": "Saludable",
+      "productionTotal": 4300,
+      "lastVaccination": "12 Oct 2023",
+      "pregnancyStatus": "No preñada",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDW3EmF97-GFzGrhnrqGjFsGAr4sL8ORhfn7YuOTjQ4FexKQWEsD6JRaC1W78OYdhmKod5pd9l_dPmsvGFeCB8U4mo6-WJYUaKdVyPpmb8NEZjUlRfXLuStBQYLovDZCafPxrpup8AvhmxPJrDSMLKtD2pDBzHtK60nlNHL6yB0xE3-AVTMemxMo7wYAU3AZiPeq53-eC8U_CAXAVBe3X8g8gOwVeBf3uL32E_qMUqjcIM2_9ZqsGrtaRYjIY2qDRLGP8sc81iEfGU",
+      "notes": "Primeriza con buena curva de producción."
+    }
+  ],
+  "healthEvents": [
+    {
+      "id": 1,
+      "animalId": "L-402",
+      "type": "Vacunación",
+      "details": "Aftosa (Lote: #AFT-2023-09)",
+      "veterinarian": "Dra. Mendoza",
+      "date": "15 Oct 2023"
+    },
+    {
+      "id": 2,
+      "animalId": "L-402",
+      "type": "Tratamiento",
+      "details": "Mastitis Leve (Cefalexina - 5 días) - Finalizado con éxito",
+      "veterinarian": "Dra. Mendoza",
+      "date": "22 Ago 2023"
+    },
+    {
+      "id": 3,
+      "animalId": "L-402",
+      "type": "Parto",
+      "details": "Cría Hembra (L-455) - Parto natural, peso cría 38kg",
+      "veterinarian": "Dr. Rivas",
+      "date": "10 Jun 2023"
+    }
+  ],
+  "checkups": [
+    {
+      "id": 1,
+      "title": "Vacunación Aftosa",
+      "target": "Lote 04 - Corrales Norte",
+      "priority": "Urgente",
+      "date": "24 Oct"
+    },
+    {
+      "id": 2,
+      "title": "Control de Mastitis",
+      "target": "Grupo Producción A",
+      "priority": "Programado",
+      "date": "27 Oct"
+    },
+    {
+      "id": 3,
+      "title": "Chequeo Prenatal",
+      "target": "Vaca ID: #L-402",
+      "priority": "Programado",
+      "date": "02 Nov"
+    }
+  ]
+}

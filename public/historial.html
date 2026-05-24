@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="local-db-fallback.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Work Sans', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c2c9bb;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#23501e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "outline-variant": "#c2c9bb",
+                        "on-tertiary-container": "#ffaac8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#a1d494",
+                        "surface-container-low": "#eff4ff",
+                        "on-surface-variant": "#42493e",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed": "#e2e2e2",
+                        "primary-fixed-dim": "#a1d494",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "outline": "#72796e",
+                        "surface-variant": "#d5e3fc",
+                        "inverse-surface": "#233144",
+                        "tertiary-fixed": "#ffd9e4",
+                        "tertiary-container": "#7c3a55",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#ccdbf3",
+                        "on-surface": "#0d1c2e",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#dfe0e0",
+                        "on-tertiary-fixed-variant": "#71314c",
+                        "on-tertiary-fixed": "#3b0520",
+                        "tertiary": "#60233e",
+                        "primary-fixed": "#bcf0ae",
+                        "primary": "#154212",
+                        "on-primary-fixed": "#002201",
+                        "surface-container-highest": "#d5e3fc",
+                        "on-background": "#0d1c2e",
+                        "secondary": "#5d5f5f",
+                        "primary-container": "#2d5a27",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-fixed-dim": "#ffb0cc",
+                        "on-secondary-container": "#616363",
+                        "surface-tint": "#3b6934",
+                        "on-primary-container": "#9dd090",
+                        "surface-container": "#e6eeff",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "margin-desktop": "32px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "lg": "40px",
+                        "base": "8px",
+                        "xl": "64px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Hanken Grotesk"],
+                        "display-lg": ["Work Sans"],
+                        "headline-md": ["Work Sans"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-lg": ["Hanken Grotesk"],
+                        "data-tabular": ["Hanken Grotesk"],
+                        "headline-lg": ["Work Sans"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "body-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "data-tabular": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  
+        /* Custom styles for dark mode */
+        html.dark .glass-card {
+            background: rgba(22, 32, 50, 0.8) !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-bright,
+        html.dark .hover\:bg-surface-bright:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-outline-variant,
+        html.dark .hover\:bg-outline-variant:hover {
+            background-color: #25354e !important;
+        }
+        html.dark .bg-emerald-100 {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-emerald-800 {
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-amber-100 {
+            background-color: #78350f !important;
+        }
+        html.dark .text-amber-800 {
+            color: #fde68a !important;
+        }
+        html.dark .bg-blue-100 {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-blue-800 {
+            color: #bfdbfe !important;
+        }
+        html.dark .bg-green-100\/90 {
+            background-color: rgba(6, 78, 59, 0.9) !important;
+        }
+        html.dark body {
+            background-color: #0b0f19 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark header {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark header h2 {
+            color: #10b981 !important;
+        }
+        html.dark aside {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark aside a:not(.bg-primary-container) {
+            color: #94a3b8 !important;
+        }
+        html.dark aside a:not(.bg-primary-container):hover {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+        html.dark main {
+            background-color: #0b0f19 !important;
+        }
+        html.dark .bg-white,
+        html.dark .bg-surface-container-lowest {
+            background-color: #162032 !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-container-low {
+            background-color: #0f172a !important;
+        }
+        html.dark .bg-surface-container {
+            background-color: #101726 !important;
+        }
+        html.dark .bg-surface-container-high {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-surface-container-highest {
+            background-color: #222f47 !important;
+        }
+        html.dark .border-outline,
+        html.dark .border-outline-variant,
+        html.dark .border-outline-variant\/30,
+        html.dark .border-outline-variant\/40,
+        html.dark .border-outline-variant\/60,
+        html.dark .border-outline-variant\/80,
+        html.dark .divide-outline-variant,
+        html.dark .divide-y > * {
+            border-color: #25354e !important;
+        }
+        html.dark .text-on-surface {
+            color: #f8fafc !important;
+        }
+        html.dark .text-on-surface-variant {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-on-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-on-secondary-container {
+            color: #e2e8f0 !important;
+        }
+        html.dark .text-on-tertiary-container {
+            color: #ffaac8 !important;
+        }
+        html.dark .text-on-error-container {
+            color: #fca5a5 !important;
+        }
+        html.dark .text-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-secondary-container {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-error {
+            color: #ef4444 !important;
+        }
+        html.dark .text-primary {
+            color: #10b981 !important;
+        }
+        html.dark .text-on-primary {
+            color: #0b0f19 !important;
+        }
+        html.dark table thead tr {
+            background-color: #101726 !important;
+            color: #f8fafc !important;
+        }
+        html.dark table tbody tr {
+            border-color: #25354e !important;
+        }
+        html.dark table tbody tr:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #25354e !important;
+        }
+        html.dark input:focus,
+        html.dark select:focus,
+        html.dark textarea:focus {
+            border-color: #10b981 !important;
+            background-color: #1e293b !important;
+            outline: none !important;
+        }
+        html.dark .bg-primary-container {
+            background-color: #064e3b !important;
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-secondary-container {
+            background-color: #1e293b !important;
+        }
+        html.dark .bg-tertiary-container {
+            background-color: #581c36 !important;
+        }
+        html.dark .bg-error-container {
+            background-color: #7f1d1d !important;
+            color: #fca5a5 !important;
+        }
+        html.dark nav.fixed {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark nav.fixed a:not(.text-primary) {
+            color: #94a3b8 !important;
+        }
+        html.dark .bg-primary {
+            background-color: #10b981 !important;
+            color: #0b0f19 !important;
+        }
+        html.dark .bg-primary:hover {
+            background-color: #059669 !important;
+        }
+        html.dark .bg-\[\#e3f2fd\] {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-\[\#1565c0\] {
+            color: #93c5fd !important;
+        }
+        html.dark .bg-\[\#dcfce7\] {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-\[\#14532d\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#2e7d32\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#c62828\] {
+            color: #fca5a5 !important;
+        }
+        html.dark svg path[stroke="#154212"] {
+            stroke: #10b981 !important;
+        }
+        html.dark svg circle[fill="#154212"] {
+            fill: #10b981 !important;
+        }
+        html.dark stop[stop-color="#154212"] {
+            stop-color: #10b981 !important;
+        }
+        html.dark .shadow-sm,
+        html.dark .shadow-md,
+        html.dark .shadow-lg,
+        html.dark .shadow-xl {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
+        }
+        html.dark ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        html.dark ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #25354e;
+            border-radius: 4px;
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+    </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden text-on-surface" id="app">
+<!-- Navigation Drawer Backdrop -->
+<div v-if="showSidebar" @click="showSidebar = false" class="fixed inset-0 bg-black/50 z-40 hidden lg:block"></div>
+<!-- Navigation Drawer -->
+<aside :class="showSidebar ? 'w-80 translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20'" class="hidden lg:flex flex-col h-[calc(100vh-4rem)] fixed left-0 top-16 z-50 border-r border-outline-variant bg-surface-container-low transition-all duration-300 ease-in-out">
+<div v-if="showSidebar" class="px-6 py-4 border-b border-outline-variant/30">
+<p class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider">Municipio Obispo</p>
+<p class="text-[11px] text-on-surface-variant">Gestión Lechera</p>
+</div>
+<nav class="flex-1 mt-4 px-2 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+      <a v-if="currentUser" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('index.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="index.html">
+        <span class="material-symbols-outlined" :class="isActive('index.html') ? 'fill-icon' : ''" :style="isActive('index.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="analytics">analytics</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Panel Control</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('ordeno.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="ordeno.html">
+        <span class="material-symbols-outlined" :class="isActive('ordeno.html') ? 'fill-icon' : ''" :style="isActive('ordeno.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="opacity">opacity</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Registro Ordeño</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('unidades.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="unidades.html">
+        <span class="material-symbols-outlined" :class="isActive('unidades.html') ? 'fill-icon' : ''" :style="isActive('unidades.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="location_on">location_on</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Gestión Fincas</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('inventario.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="inventario.html">
+        <span class="material-symbols-outlined" :class="isActive('inventario.html') ? 'fill-icon' : ''" :style="isActive('inventario.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="inventory">inventory</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Control Inventario</span>
+      </a>
+      <a v-if="currentUser && currentUser.role === 'Administrador'" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('reportes.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="reportes.html">
+        <span class="material-symbols-outlined" :class="isActive('reportes.html') ? 'fill-icon' : ''" :style="isActive('reportes.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="description">description</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Reportes Producción</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('salud.html') || isActive('historial.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="salud.html">
+        <span class="material-symbols-outlined" :class="isActive('salud.html') || isActive('historial.html') ? 'fill-icon' : ''" :style="isActive('salud.html') || isActive('historial.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="health_and_safety">health_and_safety</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Salud Animal</span>
+      </a>
+    </nav>
+<div class="p-6 border-t border-outline-variant flex items-center justify-between w-full overflow-hidden">
+  <a href="usuarios.html" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full flex-1"
+     :class="[
+       showSidebar ? 'p-1 hover:bg-surface-container-highest gap-3 justify-start' : 'p-0 w-12 h-12 mx-auto justify-center hover:bg-surface-container-highest',
+       isActive('usuarios.html') ? 'bg-primary-container text-on-primary-container font-bold' : ''
+     ]">
+    <img v-if="currentUser && currentUser.avatar && ((currentUser.avatar.startsWith('http') || currentUser.avatar.startsWith('data:')) || currentUser.avatar.startsWith('data:'))" alt="User avatar" class="w-10 h-10 min-w-[40px] rounded-full bg-secondary-container object-cover" :src="currentUser.avatar"/>
+    <div v-else class="w-10 h-10 min-w-[40px] rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">
+      {{ currentUser ? currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'US' }}
+    </div>
+    <div :class="showSidebar ? 'opacity-100 max-w-[120px] ml-2' : 'opacity-0 max-w-0 overflow-hidden lg:hidden'" class="transition-all duration-300 ease-in-out whitespace-nowrap">
+      <p class="font-label-lg text-label-lg truncate font-bold" :class="isActive('usuarios.html') ? 'text-on-primary-container' : 'text-on-surface'">{{ currentUser ? currentUser.name : 'User' }}</p>
+      <p class="font-body-sm text-body-sm truncate" :class="isActive('usuarios.html') ? 'text-on-primary-container/80' : 'text-on-surface-variant'">{{ currentUser ? currentUser.role : '' }}</p>
+    </div>
+  </a>
+  <button v-if="showSidebar" @click="logout" class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-error transition-colors flex items-center justify-center cursor-pointer" title="Cerrar Sesión">
+    <span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+  </button>
+</div>
+</aside>
+
+<!-- Profile Content Canvas -->
+<main class="lg:ml-20 pt-24 pb-24 md:pb-8 flex-1">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full h-16 bg-surface border-b border-outline-variant fixed top-0 left-0 z-50">
+<div class="flex items-center h-full">
+<div class="w-20 flex justify-center items-center h-full border-r border-outline-variant/30">
+<div @click="showSidebar = !showSidebar" class="w-12 h-12 min-w-[48px] rounded-lg bg-primary flex items-center justify-center text-on-primary cursor-pointer hover:brightness-110 active:scale-95 transition-all shadow-sm">
+<span class="material-symbols-outlined" data-icon="agriculture">agriculture</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary ml-4">Obispo Lácteo</h2>
+</div>
+<div class="flex items-center gap-4 pr-margin-mobile md:pr-margin-desktop">
+  <button @click="toggleTheme" class="w-10 h-10 rounded-full hover:bg-surface-container-highest dark:hover:bg-slate-700 text-on-surface-variant dark:text-gray-300 transition-colors flex items-center justify-center cursor-pointer" :title="isDarkMode ? 'Modo Claro' : 'Modo Oscuro'">
+    <span class="material-symbols-outlined text-[20px]">{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
+  </button>
+
+<button @click="logout" class="w-10 h-10 rounded-full hover:bg-error/10 text-on-surface-variant hover:text-error transition-colors flex items-center justify-center cursor-pointer" title="Cerrar Sesión">
+    <span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+  </button>
+  <a href="usuarios.html" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container flex items-center justify-center bg-primary text-on-primary text-sm font-bold active:scale-95 transition-transform duration-150 shadow-sm">
+    <img v-if="currentUser && currentUser.avatar && (currentUser.avatar.startsWith('http') || currentUser.avatar.startsWith('data:'))" alt="User profile" class="w-full h-full object-cover" :src="currentUser.avatar"/>
+    <span v-else>{{ currentUser ? currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'US' }}</span>
+  </a>
+</div>
+</header>
+
+<div class="px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-6 text-on-surface-variant">
+<a href="unidades.html" class="font-label-md text-label-md hover:underline">Unidades</a>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<a href="salud.html" class="font-label-md text-label-md hover:underline">Salud Animal</a>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<span class="font-label-md text-label-md font-bold text-primary">{{ animal.id }} {{ animal.name }}</span>
+</nav>
+<!-- Header Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-lg">
+<div class="md:col-span-4 lg:col-span-3">
+<div class="relative bg-white rounded-xl shadow-md border border-outline-variant overflow-hidden group">
+<img :alt="animal.name" class="w-full aspect-square object-cover" :src="animal.image"/>
+<div class="absolute top-4 right-4">
+<span :class="animal.status === 'Saludable' ? 'bg-green-100/90 text-primary border-primary/20' : (animal.status === 'En Tratamiento' ? 'bg-error-container text-on-error-container border-error/25' : 'bg-secondary-container text-on-secondary-container border-secondary/25')" class="inline-flex items-center px-3 py-1 rounded-full font-bold text-label-md border backdrop-blur-sm">
+<span :class="animal.status === 'Saludable' ? 'bg-primary' : (animal.status === 'En Tratamiento' ? 'bg-error' : 'bg-secondary')" class="w-2 h-2 rounded-full mr-2"></span>
+                                {{ animal.status }}
+                            </span>
+</div>
+</div>
+</div>
+<div class="md:col-span-8 lg:col-span-9 flex flex-col justify-between">
+<div>
+<div class="flex items-baseline gap-4 mb-2">
+<h1 class="font-display-lg text-display-lg text-on-surface">{{ animal.name }}</h1>
+<span class="font-headline-md text-headline-md text-on-surface-variant">ID: {{ animal.id }}</span>
+</div>
+<div class="flex flex-wrap gap-md mb-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="category">category</span>
+<span class="font-body-md text-body-md">Raza: <strong>{{ animal.breed }}</strong></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="event">event</span>
+<span class="font-body-md text-body-md">Edad: <strong>{{ animal.age }} años</strong></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="scale">scale</span>
+<span class="font-body-md text-body-md">Peso: <strong>{{ animal.weight }} kg</strong></span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-md">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Producción Total</p>
+<p class="font-headline-md text-headline-md text-primary">{{ animal.productionTotal ? animal.productionTotal.toLocaleString() : '0' }} L</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Últ. Vacunación</p>
+<p class="font-headline-md text-headline-md text-on-surface">{{ animal.lastVaccination || 'No registrada' }}</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Estado Preñez</p>
+<p class="font-headline-md text-headline-md text-primary">{{ animal.pregnancyStatus || 'No preñada' }}</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Clinical History & Timeline -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- History Tabs -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="flex border-b border-outline-variant">
+<button class="px-6 py-4 font-label-lg text-label-lg text-primary border-b-2 border-primary">Historial Médico</button>
+<button class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low">Producción Mensual</button>
+<button class="px-6 py-4 font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-low">Genealogía</button>
+</div>
+<div class="p-6">
+<div class="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant">
+<!-- Dynamic Event Card Loop -->
+<div v-for="event in animal.events" :key="event.id" class="relative pl-10">
+<div :class="getEventColorClass(event.type)" class="absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
+<span class="material-symbols-outlined text-white text-[14px]" :data-icon="getEventIcon(event.type)">{{ getEventIcon(event.type) }}</span>
+</div>
+<div class="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
+<div>
+<h4 class="font-headline-md text-label-lg font-bold text-on-surface">{{ event.type }}: {{ event.details }}</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Veterinario: {{ event.veterinarian }}</p>
+</div>
+<span class="font-data-tabular text-data-tabular bg-surface-container p-1 px-3 rounded text-on-surface-variant">{{ event.date }}</span>
+</div>
+</div>
+<div v-if="!animal.events || animal.events.length === 0" class="text-center italic text-on-surface-variant">
+No hay eventos clínicos registrados para este animal.
+</div>
+</div>
+<button @click="openEventModal('Chequeo')" class="mt-8 w-full py-3 border border-dashed border-outline text-primary font-bold rounded-lg hover:bg-primary-fixed transition-colors">
+                                Registrar Evento de Chequeo
+                            </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Notes & Actions -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Action Cards -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm p-6">
+<h3 class="font-headline-md text-label-lg font-bold text-on-surface mb-4">Acciones Rápidas</h3>
+<div class="space-y-3">
+<button @click="openEventModal('Tratamiento')" class="w-full flex items-center justify-center gap-3 bg-primary text-on-primary py-3 rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="add_moderator">add_moderator</span>
+                                Registrar Tratamiento
+                            </button>
+<button @click="openEventModal('Vacunación')" class="w-full flex items-center justify-center gap-3 bg-white border-2 border-primary text-primary py-3 rounded-xl font-bold hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+                                Registrar Vacunación
+                            </button>
+</div>
+</div>
+<!-- Veterinary Notes -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-label-lg font-bold text-on-surface">Notas Veterinarias</h3>
+<button @click="toggleEditNotes" class="text-primary material-symbols-outlined hover:bg-surface-container p-1 rounded transition-colors" data-icon="edit_note">edit_note</button>
+</div>
+<div v-if="!isEditingNotes" class="bg-surface p-4 rounded-lg border border-outline-variant/30 italic text-on-surface-variant font-body-sm whitespace-pre-line">
+                            "{{ animal.notes || 'Sin notas registradas.' }}"
+                        </div>
+<div v-else class="space-y-sm">
+<textarea v-model="editNotesText" class="w-full bg-surface-container-lowest border border-outline rounded-lg p-3 text-body-sm font-body-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none h-24" placeholder="Ingrese notas veterinarias..."></textarea>
+<div class="flex justify-end gap-sm">
+<button @click="isEditingNotes = false" class="px-3 py-1 border border-outline rounded-lg text-label-md hover:bg-surface-container">Cancelar</button>
+<button @click="saveNotes" :disabled="savingNotes" class="px-3 py-1 bg-primary text-on-primary rounded-lg text-label-md hover:brightness-110 active:scale-95 transition-all">
+                                {{ savingNotes ? 'Guardando...' : 'Guardar' }}
+                            </button>
+</div>
+</div>
+<p class="mt-2 text-right font-label-md text-[10px] text-outline uppercase tracking-wider">Última actualización: {{ lastNotesUpdate || 'Dra. Mendoza' }}</p>
+</div>
+<!-- Environment Info -->
+<div class="bg-surface-container-high rounded-xl p-6 border border-primary/10">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-white rounded-full">
+<span class="material-symbols-outlined text-primary" data-icon="thermostat">thermostat</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Estrés Térmico</p>
+<p class="font-headline-md text-label-lg font-bold text-primary">Nivel Bajo (Optimal)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-1 py-2 bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none lg:hidden">
+    <!-- Inicio -->
+    <a v-if="currentUser" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('index.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="index.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('index.html') ? 'fill-icon' : ''" :style="isActive('index.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="analytics">analytics</span>
+      <span class="text-[10px] mt-0.5 leading-none">Inicio</span>
+    </a>
+    <!-- Ordeño -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('ordeno.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="ordeno.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('ordeno.html') ? 'fill-icon' : ''" :style="isActive('ordeno.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="opacity">opacity</span>
+      <span class="text-[10px] mt-0.5 leading-none">Ordeño</span>
+    </a>
+    <!-- Fincas -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('unidades.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="unidades.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('unidades.html') ? 'fill-icon' : ''" :style="isActive('unidades.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="location_on">location_on</span>
+      <span class="text-[10px] mt-0.5 leading-none">Fincas</span>
+    </a>
+    <!-- Stock -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('inventario.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="inventario.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('inventario.html') ? 'fill-icon' : ''" :style="isActive('inventario.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="inventory">inventory</span>
+      <span class="text-[10px] mt-0.5 leading-none">Stock</span>
+    </a>
+    <!-- Salud -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('salud.html') || isActive('historial.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="salud.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('salud.html') || isActive('historial.html') ? 'fill-icon' : ''" :style="isActive('salud.html') || isActive('historial.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="health_and_safety">health_and_safety</span>
+      <span class="text-[10px] mt-0.5 leading-none">Salud</span>
+    </a>
+    <!-- Reportes -->
+    <a v-if="currentUser && currentUser.role === 'Administrador'" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('reportes.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="reportes.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('reportes.html') ? 'fill-icon' : ''" :style="isActive('reportes.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="description">description</span>
+      <span class="text-[10px] mt-0.5 leading-none">Reportes</span>
+    </a>
+    <!-- Perfil -->
+    <a class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('usuarios.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="usuarios.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('usuarios.html') ? 'fill-icon' : ''" :style="isActive('usuarios.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="group">group</span>
+      <span class="text-[10px] mt-0.5 leading-none">Perfil</span>
+    </a>
+  </nav>
+<!-- New Health Event Modal & Vue mount -->
+<div v-if="showEventModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl border border-outline-variant p-md max-w-md w-full shadow-xl text-left">
+    <h3 class="font-headline-md text-headline-md text-primary mb-md">Registrar Evento Veterinario</h3>
+    <form @submit.prevent="submitEvent">
+      <div class="space-y-base">
+        <div>
+          <label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">ID Animal</label>
+          <input :value="animal.id + ' - ' + animal.name" disabled class="w-full bg-surface-container border border-outline rounded-lg h-12 px-base text-body-md opacity-70 outline-none" type="text"/>
+        </div>
+        <div>
+          <label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Tipo de Evento</label>
+          <select v-model="newEvent.type" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md">
+            <option value="Vacunación">Vacunación</option>
+            <option value="Tratamiento">Tratamiento</option>
+            <option value="Parto">Parto</option>
+            <option value="Chequeo">Chequeo General</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Detalles del Evento</label>
+          <input v-model="newEvent.details" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md" placeholder="Ej. Aftosa o Mastitis Leve (Cefalexina)" type="text"/>
+        </div>
+        <div>
+          <label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Veterinario</label>
+          <input v-model="newEvent.veterinarian" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md" placeholder="Dra. Maria Mendoza" type="text"/>
+        </div>
+        <div>
+          <label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Cambiar Estado del Animal</label>
+          <select v-model="newEvent.status" class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md">
+            <option value="">No cambiar estado</option>
+            <option value="Saludable">Saludable</option>
+            <option value="En Tratamiento">En Tratamiento</option>
+            <option value="Bajo Observación">Bajo Observación</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-sm mt-lg">
+        <button type="button" @click="showEventModal = false" class="px-4 py-2 border border-outline rounded-lg font-label-lg hover:bg-surface-container">Cancelar</button>
+        <button type="submit" :disabled="submittingEvent" class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-lg hover:brightness-110 active:scale-95 transition-all">
+          {{ submittingEvent ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                    isDarkMode: false,
+                    currentUser: null,
+                animal: {
+                    id: '',
+                    name: '',
+                    breed: '',
+                    age: '',
+                    weight: '',
+                    status: 'Saludable',
+                    productionTotal: 0,
+                    lastVaccination: '',
+                    pregnancyStatus: '',
+                    image: '',
+                    notes: '',
+                    events: []
+                },
+                isEditingNotes: false,
+                editNotesText: '',
+                savingNotes: false,
+                lastNotesUpdate: 'Dra. Mendoza (05/11/2023)',
+                showEventModal: false,
+                submittingEvent: false,
+                showSidebar: false,
+                newEvent: {
+                    type: 'Tratamiento',
+                    details: '',
+                    veterinarian: 'Dra. Mendoza',
+                    status: ''
+                }
+            };
+        },
+        mounted() {
+                const theme = localStorage.getItem('theme') || 'light';
+                this.isDarkMode = theme === 'dark';
+                if (this.isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+
+                const userStr = localStorage.getItem('loggedInUser');
+                if (userStr) {
+                    this.currentUser = JSON.parse(userStr);
+                    // Force logout if account status is Inactive
+                    if (this.currentUser.status !== 'Activo') {
+                        localStorage.removeItem('loggedInUser');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    // Verify status on server to sign out inactive sessions on reload
+                    fetch(`/api/users/${this.currentUser.id}`)
+                        .then(res => {
+                            if (res.ok) return res.json();
+                            throw new Error('User not found');
+                        })
+                        .then(user => {
+                            if (user.status !== 'Activo') {
+                                localStorage.removeItem('loggedInUser');
+                                window.location.href = 'login.html';
+                            } else {
+                                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                                this.currentUser = user;
+                            }
+                        })
+                        .catch(err => console.warn("Could not verify status on server, keeping local session", err));
+
+                    // Role based guards
+                    if (this.currentUser.role === 'Operario') {
+                        window.location.href = 'ordeno.html';
+                        return;
+                    }
+        
+                } else {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+            this.fetchAnimalDetails();
+            // Bind scale micro-interactions
+            document.querySelectorAll('button, a').forEach(el => {
+                el.addEventListener('mousedown', () => { el.style.transform = 'scale(0.96)'; });
+                el.addEventListener('mouseup', () => { el.style.transform = 'scale(1)'; });
+                el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+            });
+        },
+        methods: {
+                toggleTheme() {
+                    this.isDarkMode = !this.isDarkMode;
+                    if (this.isDarkMode) {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+                },
+
+                logout() {
+                    localStorage.removeItem('loggedInUser');
+                    window.location.href = 'login.html';
+                },
+
+            isActive(page) {
+                const path = window.location.pathname;
+                return path.includes(page) || (page === 'index.html' && (path.endsWith('/') || path.endsWith('/index.html') || path === ''));
+            },
+            getAnimalIdFromUrl() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get('id') || 'L-402'; // default to L-402
+            },
+            async fetchAnimalDetails() {
+                const id = this.getAnimalIdFromUrl();
+                try {
+                    const res = await fetch(`/api/animals/${id}`);
+                    if (res.ok) {
+                        this.animal = await res.json();
+                        this.editNotesText = this.animal.notes || '';
+                    } else {
+                        console.error("Animal not found, fetching default");
+                        // try L-402 specifically
+                        const fallbackRes = await fetch('/api/animals/L-402');
+                        if (fallbackRes.ok) {
+                            this.animal = await fallbackRes.json();
+                            this.editNotesText = this.animal.notes || '';
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching animal details", err);
+                }
+            },
+            getEventColorClass(type) {
+                switch(type) {
+                    case 'Vacunación': return 'bg-primary';
+                    case 'Tratamiento': return 'bg-tertiary';
+                    case 'Parto': return 'bg-primary-container';
+                    default: return 'bg-secondary';
+                }
+            },
+            getEventIcon(type) {
+                switch(type) {
+                    case 'Vacunación': return 'vaccines';
+                    case 'Tratamiento': return 'medical_services';
+                    case 'Parto': return 'child_care';
+                    default: return 'event_note';
+                }
+            },
+            toggleEditNotes() {
+                this.isEditingNotes = !this.isEditingNotes;
+                if (this.isEditingNotes) {
+                    this.editNotesText = this.animal.notes || '';
+                }
+            },
+            async saveNotes() {
+                this.savingNotes = true;
+                const id = this.animal.id;
+                try {
+                    const res = await fetch(`/api/animals/${id}/notes`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ notes: this.editNotesText })
+                    });
+                    if (res.ok) {
+                        this.animal.notes = this.editNotesText;
+                        this.isEditingNotes = false;
+                        const now = new Date();
+                        this.lastNotesUpdate = `Dra. Mendoza (${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()})`;
+                    } else {
+                        alert("Error al guardar notas.");
+                    }
+                } catch (err) {
+                    console.error("Error saving notes", err);
+                    alert("Error de red al guardar notas.");
+                } finally {
+                    this.savingNotes = false;
+                }
+            },
+            openEventModal(type) {
+                this.newEvent.type = type;
+                this.newEvent.details = '';
+                this.newEvent.status = '';
+                this.newEvent.veterinarian = 'Dra. Mendoza';
+                this.showEventModal = true;
+            },
+            async submitEvent() {
+                this.submittingEvent = true;
+                const id = this.animal.id;
+                try {
+                    const res = await fetch(`/api/animals/${id}/events`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: this.newEvent.type,
+                            details: this.newEvent.details,
+                            veterinarian: this.newEvent.veterinarian,
+                            status: this.newEvent.status || undefined
+                        })
+                    });
+                    if (res.ok) {
+                        alert("Evento clínico registrado con éxito.");
+                        this.showEventModal = false;
+                        await this.fetchAnimalDetails();
+                    } else {
+                        alert("Error al registrar evento.");
+                    }
+                } catch (err) {
+                    console.error("Error submitting event", err);
+                    alert("Error de red al registrar evento.");
+                } finally {
+                    this.submittingEvent = false;
+                }
+            }
+        }
+    }).mount('#app');
+</script>
+</body></html>

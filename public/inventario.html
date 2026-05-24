@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="local-db-fallback.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Work+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#9dd090",
+                      "on-secondary-fixed-variant": "#454747",
+                      "outline": "#72796e",
+                      "primary": "#154212",
+                      "secondary-container": "#dfe0e0",
+                      "outline-variant": "#c2c9bb",
+                      "surface": "#f8f9ff",
+                      "on-surface-variant": "#42493e",
+                      "secondary": "#5d5f5f",
+                      "tertiary-fixed": "#ffd9e4",
+                      "on-background": "#0d1c2e",
+                      "on-tertiary-container": "#ffaac8",
+                      "surface-container": "#e6eeff",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "surface-tint": "#3b6934",
+                      "inverse-on-surface": "#eaf1ff",
+                      "inverse-surface": "#233144",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "tertiary": "#60233e",
+                      "primary-container": "#2d5a27",
+                      "secondary-fixed": "#e2e2e2",
+                      "surface-container-highest": "#d5e3fc",
+                      "on-tertiary-fixed-variant": "#71314c",
+                      "primary-fixed-dim": "#a1d494",
+                      "on-tertiary-fixed": "#3b0520",
+                      "on-secondary-container": "#616363",
+                      "on-error": "#ffffff",
+                      "surface-variant": "#d5e3fc",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#23501e",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface-bright": "#f8f9ff",
+                      "surface-dim": "#ccdbf3",
+                      "tertiary-container": "#7c3a55",
+                      "on-primary-fixed": "#002201",
+                      "tertiary-fixed-dim": "#ffb0cc",
+                      "background": "#f8f9ff",
+                      "on-surface": "#0d1c2e",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "inverse-primary": "#a1d494",
+                      "primary-fixed": "#bcf0ae",
+                      "error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "40px",
+                      "gutter": "24px",
+                      "md": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "xl": "64px",
+                      "sm": "12px",
+                      "xs": "4px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "label-md": ["Hanken Grotesk"],
+                      "body-sm": ["Hanken Grotesk"],
+                      "headline-lg": ["Work Sans"],
+                      "data-tabular": ["Hanken Grotesk"],
+                      "display-lg": ["Work Sans"],
+                      "label-lg": ["Hanken Grotesk"],
+                      "body-lg": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "headline-md": ["Work Sans"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "data-tabular": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  
+        /* Custom styles for dark mode */
+        html.dark .glass-card {
+            background: rgba(22, 32, 50, 0.8) !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-bright,
+        html.dark .hover\:bg-surface-bright:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-outline-variant,
+        html.dark .hover\:bg-outline-variant:hover {
+            background-color: #25354e !important;
+        }
+        html.dark .bg-emerald-100 {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-emerald-800 {
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-amber-100 {
+            background-color: #78350f !important;
+        }
+        html.dark .text-amber-800 {
+            color: #fde68a !important;
+        }
+        html.dark .bg-blue-100 {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-blue-800 {
+            color: #bfdbfe !important;
+        }
+        html.dark .bg-green-100\/90 {
+            background-color: rgba(6, 78, 59, 0.9) !important;
+        }
+        html.dark body {
+            background-color: #0b0f19 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark header {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark header h2 {
+            color: #10b981 !important;
+        }
+        html.dark aside {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark aside a:not(.bg-primary-container) {
+            color: #94a3b8 !important;
+        }
+        html.dark aside a:not(.bg-primary-container):hover {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+        html.dark main {
+            background-color: #0b0f19 !important;
+        }
+        html.dark .bg-white,
+        html.dark .bg-surface-container-lowest {
+            background-color: #162032 !important;
+            border-color: #25354e !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark .bg-surface-container-low {
+            background-color: #0f172a !important;
+        }
+        html.dark .bg-surface-container {
+            background-color: #101726 !important;
+        }
+        html.dark .bg-surface-container-high {
+            background-color: #1a2436 !important;
+        }
+        html.dark .bg-surface-container-highest {
+            background-color: #222f47 !important;
+        }
+        html.dark .border-outline,
+        html.dark .border-outline-variant,
+        html.dark .border-outline-variant\/30,
+        html.dark .border-outline-variant\/40,
+        html.dark .border-outline-variant\/60,
+        html.dark .border-outline-variant\/80,
+        html.dark .divide-outline-variant,
+        html.dark .divide-y > * {
+            border-color: #25354e !important;
+        }
+        html.dark .text-on-surface {
+            color: #f8fafc !important;
+        }
+        html.dark .text-on-surface-variant {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-on-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-on-secondary-container {
+            color: #e2e8f0 !important;
+        }
+        html.dark .text-on-tertiary-container {
+            color: #ffaac8 !important;
+        }
+        html.dark .text-on-error-container {
+            color: #fca5a5 !important;
+        }
+        html.dark .text-primary-container {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-secondary-container {
+            color: #94a3b8 !important;
+        }
+        html.dark .text-error {
+            color: #ef4444 !important;
+        }
+        html.dark .text-primary {
+            color: #10b981 !important;
+        }
+        html.dark .text-on-primary {
+            color: #0b0f19 !important;
+        }
+        html.dark table thead tr {
+            background-color: #101726 !important;
+            color: #f8fafc !important;
+        }
+        html.dark table tbody tr {
+            border-color: #25354e !important;
+        }
+        html.dark table tbody tr:hover {
+            background-color: #1a2436 !important;
+        }
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #25354e !important;
+        }
+        html.dark input:focus,
+        html.dark select:focus,
+        html.dark textarea:focus {
+            border-color: #10b981 !important;
+            background-color: #1e293b !important;
+            outline: none !important;
+        }
+        html.dark .bg-primary-container {
+            background-color: #064e3b !important;
+            color: #a7f3d0 !important;
+        }
+        html.dark .bg-secondary-container {
+            background-color: #1e293b !important;
+        }
+        html.dark .bg-tertiary-container {
+            background-color: #581c36 !important;
+        }
+        html.dark .bg-error-container {
+            background-color: #7f1d1d !important;
+            color: #fca5a5 !important;
+        }
+        html.dark nav.fixed {
+            background-color: #101726 !important;
+            border-color: #25354e !important;
+        }
+        html.dark nav.fixed a:not(.text-primary) {
+            color: #94a3b8 !important;
+        }
+        html.dark .bg-primary {
+            background-color: #10b981 !important;
+            color: #0b0f19 !important;
+        }
+        html.dark .bg-primary:hover {
+            background-color: #059669 !important;
+        }
+        html.dark .bg-\[\#e3f2fd\] {
+            background-color: #1e3a8a !important;
+        }
+        html.dark .text-\[\#1565c0\] {
+            color: #93c5fd !important;
+        }
+        html.dark .bg-\[\#dcfce7\] {
+            background-color: #064e3b !important;
+        }
+        html.dark .text-\[\#14532d\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#2e7d32\] {
+            color: #a7f3d0 !important;
+        }
+        html.dark .text-\[\#c62828\] {
+            color: #fca5a5 !important;
+        }
+        html.dark svg path[stroke="#154212"] {
+            stroke: #10b981 !important;
+        }
+        html.dark svg circle[fill="#154212"] {
+            fill: #10b981 !important;
+        }
+        html.dark stop[stop-color="#154212"] {
+            stop-color: #10b981 !important;
+        }
+        html.dark .shadow-sm,
+        html.dark .shadow-md,
+        html.dark .shadow-lg,
+        html.dark .shadow-xl {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
+        }
+        html.dark ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        html.dark ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #25354e;
+            border-radius: 4px;
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+    </style>
+  </head>
+<body class="font-body-md text-body-md overflow-x-hidden text-on-surface" id="app">
+<!-- Navigation Drawer Backdrop -->
+<div v-if="showSidebar" @click="showSidebar = false" class="fixed inset-0 bg-black/50 z-40 hidden lg:block"></div>
+<!-- Navigation Drawer -->
+<aside :class="showSidebar ? 'w-80 translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-20'" class="hidden lg:flex flex-col h-[calc(100vh-4rem)] fixed left-0 top-16 z-50 border-r border-outline-variant bg-surface-container-low transition-all duration-300 ease-in-out">
+<div v-if="showSidebar" class="px-6 py-4 border-b border-outline-variant/30">
+<p class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider">Municipio Obispo</p>
+<p class="text-[11px] text-on-surface-variant">Gestión Lechera</p>
+</div>
+<nav class="flex-1 mt-4 px-2 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+      <a v-if="currentUser" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('index.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="index.html">
+        <span class="material-symbols-outlined" :class="isActive('index.html') ? 'fill-icon' : ''" :style="isActive('index.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="analytics">analytics</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Panel Control</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('ordeno.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="ordeno.html">
+        <span class="material-symbols-outlined" :class="isActive('ordeno.html') ? 'fill-icon' : ''" :style="isActive('ordeno.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="opacity">opacity</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Registro Ordeño</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('unidades.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="unidades.html">
+        <span class="material-symbols-outlined" :class="isActive('unidades.html') ? 'fill-icon' : ''" :style="isActive('unidades.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="location_on">location_on</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Gestión Fincas</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario' || currentUser.role === 'Operario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('inventario.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="inventario.html">
+        <span class="material-symbols-outlined" :class="isActive('inventario.html') ? 'fill-icon' : ''" :style="isActive('inventario.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="inventory">inventory</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Control Inventario</span>
+      </a>
+      <a v-if="currentUser && currentUser.role === 'Administrador'" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('reportes.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="reportes.html">
+        <span class="material-symbols-outlined" :class="isActive('reportes.html') ? 'fill-icon' : ''" :style="isActive('reportes.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="description">description</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Reportes Producción</span>
+      </a>
+      <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario')" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full"
+         :class="[
+           showSidebar ? 'px-4 py-3 mx-2 justify-start gap-3 w-[calc(100%-16px)]' : 'p-0 w-12 h-12 mx-auto justify-center',
+           isActive('salud.html') || isActive('historial.html') ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-surface-container-highest'
+         ]"
+         href="salud.html">
+        <span class="material-symbols-outlined" :class="isActive('salud.html') || isActive('historial.html') ? 'fill-icon' : ''" :style="isActive('salud.html') || isActive('historial.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="health_and_safety">health_and_safety</span>
+        <span v-if="showSidebar" class="font-body-md text-body-md whitespace-nowrap transition-all duration-300">Salud Animal</span>
+      </a>
+    </nav>
+<div class="p-6 border-t border-outline-variant flex items-center justify-between w-full overflow-hidden">
+  <a href="usuarios.html" @click="showSidebar = false" class="flex items-center transition-all duration-200 rounded-full flex-1"
+     :class="[
+       showSidebar ? 'p-1 hover:bg-surface-container-highest gap-3 justify-start' : 'p-0 w-12 h-12 mx-auto justify-center hover:bg-surface-container-highest',
+       isActive('usuarios.html') ? 'bg-primary-container text-on-primary-container font-bold' : ''
+     ]">
+    <img v-if="currentUser && currentUser.avatar && ((currentUser.avatar.startsWith('http') || currentUser.avatar.startsWith('data:')) || currentUser.avatar.startsWith('data:'))" alt="User avatar" class="w-10 h-10 min-w-[40px] rounded-full bg-secondary-container object-cover" :src="currentUser.avatar"/>
+    <div v-else class="w-10 h-10 min-w-[40px] rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">
+      {{ currentUser ? currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'US' }}
+    </div>
+    <div :class="showSidebar ? 'opacity-100 max-w-[120px] ml-2' : 'opacity-0 max-w-0 overflow-hidden lg:hidden'" class="transition-all duration-300 ease-in-out whitespace-nowrap">
+      <p class="font-label-lg text-label-lg truncate font-bold" :class="isActive('usuarios.html') ? 'text-on-primary-container' : 'text-on-surface'">{{ currentUser ? currentUser.name : 'User' }}</p>
+      <p class="font-body-sm text-body-sm truncate" :class="isActive('usuarios.html') ? 'text-on-primary-container/80' : 'text-on-surface-variant'">{{ currentUser ? currentUser.role : '' }}</p>
+    </div>
+  </a>
+  <button v-if="showSidebar" @click="logout" class="p-2 hover:bg-surface-container-highest rounded-full text-on-surface-variant hover:text-error transition-colors flex items-center justify-center cursor-pointer" title="Cerrar Sesión">
+    <span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+  </button>
+</div>
+</aside>
+
+<!-- Main Content Area -->
+<main class="lg:ml-20 pt-16 pb-24 md:pb-8">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full h-16 bg-surface border-b border-outline-variant fixed top-0 left-0 z-50">
+<div class="flex items-center h-full">
+<div class="w-20 flex justify-center items-center h-full border-r border-outline-variant/30">
+<div @click="showSidebar = !showSidebar" class="w-12 h-12 min-w-[48px] rounded-lg bg-primary flex items-center justify-center text-on-primary cursor-pointer hover:brightness-110 active:scale-95 transition-all shadow-sm">
+<span class="material-symbols-outlined" data-icon="agriculture">agriculture</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary ml-4">Obispo Lácteo</h2>
+</div>
+<div class="flex items-center gap-4 pr-margin-mobile md:pr-margin-desktop">
+  <button @click="toggleTheme" class="w-10 h-10 rounded-full hover:bg-surface-container-highest dark:hover:bg-slate-700 text-on-surface-variant dark:text-gray-300 transition-colors flex items-center justify-center cursor-pointer" :title="isDarkMode ? 'Modo Claro' : 'Modo Oscuro'">
+    <span class="material-symbols-outlined text-[20px]">{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
+  </button>
+
+<button @click="logout" class="w-10 h-10 rounded-full hover:bg-error/10 text-on-surface-variant hover:text-error transition-colors flex items-center justify-center cursor-pointer" title="Cerrar Sesión">
+    <span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+  </button>
+  <a href="usuarios.html" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container flex items-center justify-center bg-primary text-on-primary text-sm font-bold active:scale-95 transition-transform duration-150 shadow-sm">
+    <img v-if="currentUser && currentUser.avatar && (currentUser.avatar.startsWith('http') || currentUser.avatar.startsWith('data:'))" alt="User profile" class="w-full h-full object-cover" :src="currentUser.avatar"/>
+    <span v-else>{{ currentUser ? currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'US' }}</span>
+  </a>
+</div>
+</header>
+
+<div class="px-margin-mobile md:px-margin-desktop py-8 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Control Inventario</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Gestión y monitoreo de suministros críticos para la producción lechera.</p>
+</div>
+<div class="flex gap-3">
+<button @click="showAddModal = true" class="bg-primary text-on-primary font-label-lg text-label-lg px-6 py-2.5 rounded-lg flex items-center gap-2 shadow-md hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    Nuevo Item
+                </button>
+</div>
+</div>
+<!-- Inventory Dashboard Stats (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+<div @click="selectedStatusFilter = ''" :class="selectedStatusFilter === '' ? 'ring-2 ring-primary border-transparent' : 'border-outline-variant hover:border-primary/50'" class="bg-surface-container-low p-6 rounded-xl border flex flex-col justify-between cursor-pointer transition-all duration-200">
+<span class="text-on-surface-variant font-label-md text-label-md">TOTAL ITEMS</span>
+<span class="text-4xl font-bold text-primary mt-2">{{ totalItems }}</span>
+</div>
+<div @click="selectedStatusFilter = (selectedStatusFilter === 'CRÍTICO' ? '' : 'CRÍTICO')" :class="selectedStatusFilter === 'CRÍTICO' ? 'ring-2 ring-error border-transparent' : 'border-error/20 hover:border-error/50'" class="bg-error-container/20 p-6 rounded-xl border flex flex-col justify-between cursor-pointer transition-all duration-200">
+<span class="text-on-error-container font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="error">error</span> CRÍTICO
+                </span>
+<span class="text-4xl font-bold text-on-error-container mt-2">{{ String(criticalCount).padStart(2, '0') }}</span>
+</div>
+<div @click="selectedStatusFilter = (selectedStatusFilter === 'BAJO' ? '' : 'BAJO')" :class="selectedStatusFilter === 'BAJO' ? 'ring-2 ring-tertiary border-transparent' : 'border-tertiary/20 hover:border-tertiary/50'" class="bg-tertiary-container/10 p-6 rounded-xl border flex flex-col justify-between cursor-pointer transition-all duration-200">
+<span class="text-tertiary font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning">warning</span> BAJO
+                </span>
+<span class="text-4xl font-bold text-tertiary mt-2">{{ String(lowCount).padStart(2, '0') }}</span>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl border border-outline-variant flex flex-col justify-between">
+<span class="text-on-surface-variant font-label-md text-label-md">PRÓXIMA ENTREGA</span>
+<span class="text-xl font-bold text-primary mt-2">Mañana, 08:00</span>
+</div>
+</div>
+<!-- Inventory Lists -->
+<div class="space-y-12">
+<!-- Category: Feed -->
+<section>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="grass">grass</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Alimento y Nutrición</h3>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-lg text-label-lg">
+<tr>
+<th class="px-6 py-4">Producto</th>
+<th class="px-6 py-4">Stock Actual</th>
+<th class="px-6 py-4">Estado</th>
+<th class="px-6 py-4 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr v-for="item in feedItems" :key="item.id" class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 font-bold">{{ item.name }}</td>
+<td class="px-6 py-4 font-data-tabular">{{ item.stock.toLocaleString() }} {{ item.unit }}</td>
+<td class="px-6 py-4">
+<span :class="item.status === 'OK' ? 'bg-primary/10 text-primary' : (item.status === 'BAJO' ? 'bg-tertiary/10 text-tertiary' : 'bg-error/10 text-error')" class="px-3 py-1 rounded-full text-[12px] font-bold">{{ item.status }}</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button @click="adjustStock(item)" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-lg font-label-md transition-all active:scale-95 border border-primary/20">Ajustar Stock</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Category: Medicine -->
+<section>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="vaccines">vaccines</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Medicamentos y Salud</h3>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-lg text-label-lg">
+<tr>
+<th class="px-6 py-4">Producto</th>
+<th class="px-6 py-4">Stock Actual</th>
+<th class="px-6 py-4">Estado</th>
+<th class="px-6 py-4 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr v-for="item in medicineItems" :key="item.id" class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 font-bold">{{ item.name }}</td>
+<td class="px-6 py-4 font-data-tabular">{{ item.stock.toLocaleString() }} {{ item.unit }}</td>
+<td class="px-6 py-4">
+<span :class="item.status === 'OK' ? 'bg-primary/10 text-primary' : (item.status === 'BAJO' ? 'bg-tertiary/10 text-tertiary' : 'bg-error/10 text-error')" class="px-3 py-1 rounded-full text-[12px] font-bold">{{ item.status }}</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button @click="adjustStock(item)" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-lg font-label-md transition-all active:scale-95 border border-primary/20">Ajustar Stock</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Category: Supplies -->
+<section>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="sanitizer">sanitizer</span>
+</div>
+<h3 class="font-headline-md text-headline-md">Suministros de Higiene</h3>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-lg text-label-lg">
+<tr>
+<th class="px-6 py-4">Producto</th>
+<th class="px-6 py-4">Stock Actual</th>
+<th class="px-6 py-4">Estado</th>
+<th class="px-6 py-4 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr v-for="item in hygieneItems" :key="item.id" class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 font-bold">{{ item.name }}</td>
+<td class="px-6 py-4 font-data-tabular">{{ item.stock.toLocaleString() }} {{ item.unit }}</td>
+<td class="px-6 py-4">
+<span :class="item.status === 'OK' ? 'bg-primary/10 text-primary' : (item.status === 'BAJO' ? 'bg-tertiary/10 text-tertiary' : 'bg-error/10 text-error')" class="px-3 py-1 rounded-full text-[12px] font-bold">{{ item.status }}</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button @click="adjustStock(item)" class="text-primary hover:bg-primary/10 px-4 py-2 rounded-lg font-label-md transition-all active:scale-95 border border-primary/20">Ajustar Stock</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-1 py-2 bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none lg:hidden">
+    <!-- Inicio -->
+    <a v-if="currentUser" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('index.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="index.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('index.html') ? 'fill-icon' : ''" :style="isActive('index.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="analytics">analytics</span>
+      <span class="text-[10px] mt-0.5 leading-none">Inicio</span>
+    </a>
+    <!-- Ordeño -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('ordeno.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="ordeno.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('ordeno.html') ? 'fill-icon' : ''" :style="isActive('ordeno.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="opacity">opacity</span>
+      <span class="text-[10px] mt-0.5 leading-none">Ordeño</span>
+    </a>
+    <!-- Fincas -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('unidades.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="unidades.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('unidades.html') ? 'fill-icon' : ''" :style="isActive('unidades.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="location_on">location_on</span>
+      <span class="text-[10px] mt-0.5 leading-none">Fincas</span>
+    </a>
+    <!-- Stock -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario' || currentUser.role === 'Operario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('inventario.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="inventario.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('inventario.html') ? 'fill-icon' : ''" :style="isActive('inventario.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="inventory">inventory</span>
+      <span class="text-[10px] mt-0.5 leading-none">Stock</span>
+    </a>
+    <!-- Salud -->
+    <a v-if="currentUser && (currentUser.role === 'Administrador' || currentUser.role === 'Veterinario')" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('salud.html') || isActive('historial.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="salud.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('salud.html') || isActive('historial.html') ? 'fill-icon' : ''" :style="isActive('salud.html') || isActive('historial.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="health_and_safety">health_and_safety</span>
+      <span class="text-[10px] mt-0.5 leading-none">Salud</span>
+    </a>
+    <!-- Reportes -->
+    <a v-if="currentUser && currentUser.role === 'Administrador'" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('reportes.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="reportes.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('reportes.html') ? 'fill-icon' : ''" :style="isActive('reportes.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="description">description</span>
+      <span class="text-[10px] mt-0.5 leading-none">Reportes</span>
+    </a>
+    <!-- Perfil -->
+    <a class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200"
+       :class="isActive('usuarios.html') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'" href="usuarios.html">
+      <span class="material-symbols-outlined text-[20px]" :class="isActive('usuarios.html') ? 'fill-icon' : ''" :style="isActive('usuarios.html') ? 'font-variation-settings: \'FILL\' 1;' : ''" data-icon="group">group</span>
+      <span class="text-[10px] mt-0.5 leading-none">Perfil</span>
+    </a>
+  </nav>
+<!-- FAB (Floating Action Button) - Add Item Contextual -->
+<button @click="showAddModal = true" class="fixed bottom-24 right-6 md:right-10 bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all md:hidden z-40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+
+<!-- New Item Modal -->
+<div v-if="showAddModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div class="bg-white rounded-xl border border-outline-variant p-md max-w-md w-full shadow-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-md">Nuevo Artículo de Inventario</h3>
+<form @submit.prevent="addItem">
+<div class="space-y-base">
+<div>
+<label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Nombre del Producto</label>
+<input v-model="newItem.name" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md" placeholder="Ej. Concentrado Lechero 22%" type="text"/>
+</div>
+<div>
+<label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Categoría</label>
+<select v-model="newItem.category" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md">
+<option value="feed">Alimento y Nutrición</option>
+<option value="medicine">Medicamentos y Salud</option>
+<option value="hygiene">Suministros de Higiene</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Stock Inicial</label>
+<input v-model.number="newItem.stock" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md" type="number" min="0" step="0.1"/>
+</div>
+<div>
+<label class="block font-label-lg text-label-lg mb-xs text-on-surface-variant">Unidad</label>
+<input v-model="newItem.unit" required class="w-full bg-surface-container-lowest border border-outline rounded-lg h-12 px-base focus:ring-2 focus:ring-primary outline-none text-body-md" placeholder="Ej. kg, unidades" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-sm mt-lg">
+<button type="button" @click="showAddModal = false" class="px-4 py-2 border border-outline rounded-lg font-label-lg hover:bg-surface-container">Cancelar</button>
+<button type="submit" class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-lg hover:brightness-110 active:scale-95 transition-all">Guardar</button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    isDarkMode: false,
+                    currentUser: null,
+                    showSidebar: false,
+                    items: [],
+                    showAddModal: false,
+                    selectedStatusFilter: '',
+                    newItem: {
+                        name: '',
+                        category: 'feed',
+                        stock: 0,
+                        unit: 'kg'
+                    }
+                };
+            },
+            computed: {
+                totalItems() {
+                    return this.items.length;
+                },
+                criticalCount() {
+                    return this.items.filter(i => i.status === 'CRÍTICO').length;
+                },
+                lowCount() {
+                    return this.items.filter(i => i.status === 'BAJO').length;
+                },
+                feedItems() {
+                    let res = this.items.filter(i => i.category === 'feed');
+                    if (this.selectedStatusFilter) {
+                        res = res.filter(i => i.status === this.selectedStatusFilter);
+                    }
+                    return res;
+                },
+                medicineItems() {
+                    let res = this.items.filter(i => i.category === 'medicine');
+                    if (this.selectedStatusFilter) {
+                        res = res.filter(i => i.status === this.selectedStatusFilter);
+                    }
+                    return res;
+                },
+                hygieneItems() {
+                    let res = this.items.filter(i => i.category === 'hygiene');
+                    if (this.selectedStatusFilter) {
+                        res = res.filter(i => i.status === this.selectedStatusFilter);
+                    }
+                    return res;
+                }
+            },
+            mounted() {
+                const theme = localStorage.getItem('theme') || 'light';
+                this.isDarkMode = theme === 'dark';
+                if (this.isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+
+                const userStr = localStorage.getItem('loggedInUser');
+                if (userStr) {
+                    this.currentUser = JSON.parse(userStr);
+                    // Force logout if account status is Inactive
+                    if (this.currentUser.status !== 'Activo') {
+                        localStorage.removeItem('loggedInUser');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    // Verify status on server to sign out inactive sessions on reload
+                    fetch(`/api/users/${this.currentUser.id}`)
+                        .then(res => {
+                            if (res.ok) return res.json();
+                            throw new Error('User not found');
+                        })
+                        .then(user => {
+                            if (user.status !== 'Activo') {
+                                localStorage.removeItem('loggedInUser');
+                                window.location.href = 'login.html';
+                            } else {
+                                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                                this.currentUser = user;
+                            }
+                        })
+                        .catch(err => console.warn("Could not verify status on server, keeping local session", err));
+                } else {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                this.fetchItems();
+            },
+            methods: {
+                toggleTheme() {
+                    this.isDarkMode = !this.isDarkMode;
+                    if (this.isDarkMode) {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+                },
+
+                logout() {
+                    localStorage.removeItem('loggedInUser');
+                    window.location.href = 'login.html';
+                },
+
+                isActive(page) {
+                    const path = window.location.pathname;
+                    return path.includes(page) || (page === 'index.html' && (path.endsWith('/') || path.endsWith('/index.html') || path === ''));
+                },
+                async fetchItems() {
+                    try {
+                        const res = await fetch('/api/inventory');
+                        this.items = await res.json();
+                    } catch (err) {
+                        console.error("Error fetching inventory", err);
+                    }
+                },
+                async adjustStock(item) {
+                    const newStockStr = prompt(`Ingrese el nuevo stock para ${item.name} (Actual: ${item.stock} ${item.unit}):`, item.stock);
+                    if (newStockStr !== null) {
+                        const newStock = parseFloat(newStockStr);
+                        if (!isNaN(newStock) && newStock >= 0) {
+                            try {
+                                const res = await fetch(`/api/inventory/${item.id}/stock`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ stock: newStock })
+                                });
+                                if (res.ok) {
+                                    const updated = await res.json();
+                                    item.stock = updated.stock;
+                                    item.status = updated.status;
+                                }
+                            } catch (err) {
+                                  console.error("Error adjusting stock", err);
+                            }
+                        } else {
+                            alert("Por favor ingrese un número válido mayor o igual a 0.");
+                        }
+                    }
+                },
+                async addItem() {
+                    try {
+                        const res = await fetch('/api/inventory', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.newItem)
+                        });
+                        if (res.ok) {
+                            const created = await res.json();
+                            this.items.push(created);
+                            this.showAddModal = false;
+                            this.newItem = { name: '', category: 'feed', stock: 0, unit: 'kg' };
+                        }
+                    } catch (err) {
+                        console.error("Error adding item", err);
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body></html>
