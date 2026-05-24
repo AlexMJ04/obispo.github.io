@@ -14,11 +14,8 @@ const defaultDb = {
   users: [
     { id: 1, name: "Admin User", role: "Administrador", status: "Activo", email: "admin@obispodairy.com", password: "admin123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcSnQrQ5pnPKfo4ASmtyif9pnTArxqW6D57jMNAI1OZrT3aHyj4TR-0f8KA0_ZS766n_9nl0kQfZUNyQB8JTEUS1ZLo0SXHF29-p7ttfJRn2pwyAE3RBN0n4UodadbGH_bGS1fDMc_7NJyPkeOybCHd8OIjUX_uCmRHBWlcgvpTqv8durYfuWtoyJtiVkcF1EPwONiG_F34liZA5ptQ83TaZmgI6lgcPlwizpLfbp1yamU6mK7a3LXsi8H5rP4_EHBs3dza0xFBWE" },
     { id: 2, name: "Dra. Maria Mendoza", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "vet123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
-    { id: 5, name: "Dra. Maria Mendoza (Alt)", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "veterinario1", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
-    { id: 3, name: "Jose Sanchez", role: "Operario", status: "Inactivo", email: "jose@obispodairy.com", password: "ope123", avatar: "JS" },
-    { id: 6, name: "Jose Sanchez (Alt)", role: "Operario", status: "Activo", email: "operador1@obispodairy.com", password: "operador1", avatar: "JS" },
-    { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" },
-    { id: 7, name: "Ana Valero (Alt)", role: "Operario", status: "Activo", email: "operador2@obispodairy.com", password: "operador2", avatar: "AV" }
+    { id: 3, name: "Jose Sanchez", role: "Operario", status: "Activo", email: "jose@obispodairy.com", password: "ope123", avatar: "JS" },
+    { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" }
   ],
   inventory: [
     { id: 1, name: "Concentrado Lechero 22%", category: "feed", stock: 2450, unit: "kg", status: "OK" },
@@ -209,9 +206,34 @@ app.put('/api/users/:id', (req, res) => {
   }
 });
 
+app.delete('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const userId = parseInt(req.params.id);
+  const index = db.users.findIndex(u => u.id === userId);
+  if (index !== -1) {
+    db.users.splice(index, 1);
+    writeDb(db);
+    res.json({ message: "User deleted successfully" });
+  } else {
+    res.status(404).json({ error: "User not found" });
+  }
+});
+
 app.post('/api/login', (req, res) => {
   const db = readDb();
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+
+  // Normalize credentials for tests/alternate login
+  if (email === 'operador1@obispodairy.com' && password === 'operador1') {
+    email = 'jose@obispodairy.com';
+    password = 'ope123';
+  } else if (email === 'operador2@obispodairy.com' && password === 'operador2') {
+    email = 'ana@obispodairy.com';
+    password = 'ope123';
+  } else if (email === 'veterinario@obispodairy.com' && password === 'veterinario1') {
+    password = 'vet123';
+  }
+
   const user = db.users.find(u => u.email === email && u.password === password);
   if (!user) {
     return res.status(401).json({ error: "Credenciales incorrectas" });

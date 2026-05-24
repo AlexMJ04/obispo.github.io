@@ -19,30 +19,12 @@
       "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww"
     },
     {
-      "id": 5,
-      "name": "Dra. Maria Mendoza (Alt)",
-      "role": "Veterinario",
-      "status": "Activo",
-      "email": "veterinario@obispodairy.com",
-      "password": "veterinario1",
-      "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww"
-    },
-    {
       "id": 3,
       "name": "Jose Sanchez",
       "role": "Operario",
-      "status": "Inactivo",
+      "status": "Activo",
       "email": "jose@obispodairy.com",
       "password": "ope123",
-      "avatar": "JS"
-    },
-    {
-      "id": 6,
-      "name": "Jose Sanchez (Alt)",
-      "role": "Operario",
-      "status": "Activo",
-      "email": "operador1@obispodairy.com",
-      "password": "operador1",
       "avatar": "JS"
     },
     {
@@ -52,15 +34,6 @@
       "status": "Activo",
       "email": "ana@obispodairy.com",
       "password": "ope123",
-      "avatar": "AV"
-    },
-    {
-      "id": 7,
-      "name": "Ana Valero (Alt)",
-      "role": "Operario",
-      "status": "Activo",
-      "email": "operador2@obispodairy.com",
-      "password": "operador2",
       "avatar": "AV"
     }
   ],

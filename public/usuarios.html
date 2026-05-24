@@ -583,9 +583,12 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
             <div v-for="user in filteredUsers" :key="user.id" @click="openEditUserModal(user)" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex gap-md items-center relative overflow-hidden group hover:shadow-md transition-all cursor-pointer hover:border-primary">
-              <div class="absolute top-0 right-0 p-2 z-10">
-                <button @click.stop="toggleStatus(user)" class="p-1 hover:bg-surface-container rounded-full text-on-surface-variant" title="Alternar Estado (Activo/Inactivo)">
-                  <span class="material-symbols-outlined" data-icon="sync">sync</span>
+              <div class="absolute top-0 right-0 p-2 z-10 flex gap-1">
+                <button @click.stop="toggleStatus(user)" class="p-1 hover:bg-surface-container dark:hover:bg-slate-700 rounded-full text-on-surface-variant dark:text-gray-300" title="Alternar Estado (Activo/Inactivo)">
+                  <span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+                </button>
+                <button @click.stop="confirmDeleteUser(user)" class="p-1 hover:bg-red-100 dark:hover:bg-red-950/30 rounded-full text-on-surface-variant dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400" title="Eliminar Usuario">
+                  <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
                 </button>
               </div>
               <img v-if="user.avatar && (user.avatar.startsWith('http') || user.avatar.startsWith('data:'))" :src="user.avatar" class="w-16 h-16 rounded-full object-cover flex-shrink-0" :alt="user.name"/>
@@ -650,6 +653,23 @@
     <span class="material-symbols-outlined" data-icon="add">add</span>
     <span class="absolute right-full mr-4 bg-primary text-on-primary px-3 py-1 rounded text-label-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Agregar Usuario</span>
   </button>
+
+  <!-- Confirm Delete User Modal -->
+  <div v-if="showDeleteConfirmModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#162032] rounded-xl border border-outline-variant dark:border-[#25354e] p-6 max-w-md w-full shadow-xl text-center">
+      <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-950/30 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-3xl">warning</span>
+      </div>
+      <h3 class="font-headline-md text-headline-md text-primary dark:text-[#10b981] mb-2 font-bold text-center">¿Eliminar Usuario?</h3>
+      <p class="text-on-surface-variant dark:text-slate-300 text-body-md mb-6">
+        ¿Está seguro que desea eliminar el usuario <strong class="text-on-surface dark:text-white">{{ userToDelete ? userToDelete.name : '' }}</strong>?
+      </p>
+      <div class="flex justify-end gap-3">
+        <button type="button" @click="showDeleteConfirmModal = false" class="px-4 py-2 border border-outline-variant dark:border-[#25354e] rounded-lg font-label-lg hover:bg-surface-container dark:hover:bg-slate-700 transition-colors">Cancelar</button>
+        <button type="button" @click="deleteUser" class="px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-lg font-label-lg transition-all active:scale-95 duration-150">Aceptar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Profile Settings Modal -->
   <div v-if="showConfigModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -863,6 +883,8 @@
                 showAddModal: false,
                 showConfigModal: false,
                 showEditUserModal: false,
+                showDeleteConfirmModal: false,
+                userToDelete: null,
                 showProfilePassword: false,
                 showEditUserPassword: false,
                 selectedRoleFilter: 'todos',
@@ -971,11 +993,12 @@
                 const path = window.location.pathname;
                 return path.includes(page) || (page === 'index.html' && (path.endsWith('/') || path.endsWith('/index.html') || path === ''));
             },
-            async fetchUsers() {
+             async fetchUsers() {
                 try {
                     const res = await fetch('/api/users');
                     if (res.ok) {
-                        this.users = await res.json();
+                        const allUsers = await res.json();
+                        this.users = allUsers.filter(u => !u.name.endsWith('(Alt)'));
                         this.saveLocalUsers();
                     } else {
                         this.localUsersFallback();
@@ -988,16 +1011,22 @@
             localUsersFallback() {
                 const fallbackUsers = [
                     { id: 1, name: "Admin User", role: "Administrador", status: "Activo", email: "admin@obispodairy.com", password: "admin123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcSnQrQ5pnPKfo4ASmtyif9pnTArxqW6D57jMNAI1OZrT3aHyj4TR-0f8KA0_ZS766n_9nl0kQfZUNyQB8JTEUS1ZLo0SXHF29-p7ttfJRn2pwyAE3RBN0n4UodadbGH_bGS1fDMc_7NJyPkeOybCHd8OIjUX_uCmRHBWlcgvpTqv8durYfuWtoyJtiVkcF1EPwONiG_F34liZA5ptQ83TaZmgI6lgcPlwizpLfbp1yamU6mK7a3LXsi8H5rP4_EHBs3dza0xFBWE" },
-                    { id: 2, name: "Dra. Maria Mendoza", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "veterinario1", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
-                    { id: 3, name: "Jose Sanchez", role: "Operario", status: "Activo", email: "operador1@obispodairy.com", password: "operador1", avatar: "JS" },
-                    { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "operador2@obispodairy.com", password: "operador2", avatar: "AV" }
+                    { id: 2, name: "Dra. Maria Mendoza", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "vet123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
+                    { id: 3, name: "Jose Sanchez", role: "Operario", status: "Activo", email: "jose@obispodairy.com", password: "ope123", avatar: "JS" },
+                    { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" }
                 ];
                 const storedUsers = localStorage.getItem('localUsersData');
                 if (storedUsers) {
-                    this.users = JSON.parse(storedUsers);
+                    try {
+                        this.users = JSON.parse(storedUsers).filter(u => !u.name.endsWith('(Alt)'));
+                        this.saveLocalUsers();
+                    } catch (e) {
+                        this.users = fallbackUsers;
+                        this.saveLocalUsers();
+                    }
                 } else {
                     this.users = fallbackUsers;
-                    localStorage.setItem('localUsersData', JSON.stringify(fallbackUsers));
+                    this.saveLocalUsers();
                 }
             },
             saveLocalUsers() {
@@ -1191,6 +1220,43 @@
                     };
                     reader.readAsDataURL(file);
                 }
+            },
+            confirmDeleteUser(user) {
+                this.userToDelete = user;
+                this.showDeleteConfirmModal = true;
+            },
+            async deleteUser() {
+                if (!this.userToDelete) return;
+                try {
+                    const res = await fetch(`/api/users/${this.userToDelete.id}`, {
+                        method: 'DELETE'
+                    });
+                    if (res.ok) {
+                        const idx = this.users.findIndex(u => u.id === this.userToDelete.id);
+                        if (idx !== -1) {
+                            this.users.splice(idx, 1);
+                        }
+                        this.saveLocalUsers();
+                        this.showDeleteConfirmModal = false;
+                        this.userToDelete = null;
+                        alert("Usuario eliminado correctamente.");
+                    } else {
+                        this.deleteUserLocally();
+                    }
+                } catch (err) {
+                    console.warn("Error deleting user, applying locally", err);
+                    this.deleteUserLocally();
+                }
+            },
+            deleteUserLocally() {
+                const idx = this.users.findIndex(u => u.id === this.userToDelete.id);
+                if (idx !== -1) {
+                    this.users.splice(idx, 1);
+                }
+                this.saveLocalUsers();
+                this.showDeleteConfirmModal = false;
+                this.userToDelete = null;
+                alert("Usuario eliminado (Modo Local).");
             },
             logout() {
                 localStorage.removeItem('loggedInUser');
