@@ -4,8 +4,11 @@
     users: [
       { id: 1, name: "Admin User", role: "Administrador", status: "Activo", email: "admin@obispodairy.com", password: "admin123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCcSnQrQ5pnPKfo4ASmtyif9pnTArxqW6D57jMNAI1OZrT3aHyj4TR-0f8KA0_ZS766n_9nl0kQfZUNyQB8JTEUS1ZLo0SXHF29-p7ttfJRn2pwyAE3RBN0n4UodadbGH_bGS1fDMc_7NJyPkeOybCHd8OIjUX_uCmRHBWlcgvpTqv8durYfuWtoyJtiVkcF1EPwONiG_F34liZA5ptQ83TaZmgI6lgcPlwizpLfbp1yamU6mK7a3LXsi8H5rP4_EHBs3dza0xFBWE" },
       { id: 2, name: "Dra. Maria Mendoza", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "vet123", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
+      { id: 5, name: "Dra. Maria Mendoza (Alt)", role: "Veterinario", status: "Activo", email: "veterinario@obispodairy.com", password: "veterinario1", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhCyxLO2Hb3F75HAUXLZIJGTVsyM1Ul7FTiwJRExwn5Pz1_ApGAgfv2ceaglS0MC7WhJSf53ug7F_eRdgVjdq89nIZuOIEPvhxF4HD1kPKvrXCkVISs6e64xjBybc6BWadyXRhSQE6hm2sT33F0ZonszGQ6UxaZKKZgTNCkUFfRhriOR36eQD_ZlvoKObiWijAuy1NTe-Piv4keH0WAqqr2CHfT6vSX09KE5EHCYqTVGL6GX8tRBu9M_E5XdMsGkvU-GyH5IY5Eww" },
       { id: 3, name: "Jose Sanchez", role: "Operario", status: "Inactivo", email: "jose@obispodairy.com", password: "ope123", avatar: "JS" },
-      { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" }
+      { id: 6, name: "Jose Sanchez (Alt)", role: "Operario", status: "Activo", email: "operador1@obispodairy.com", password: "operador1", avatar: "JS" },
+      { id: 4, name: "Ana Valero", role: "Operario", status: "Activo", email: "ana@obispodairy.com", password: "ope123", avatar: "AV" },
+      { id: 7, name: "Ana Valero (Alt)", role: "Operario", status: "Activo", email: "operador2@obispodairy.com", password: "operador2", avatar: "AV" }
     ],
     inventory: [
       { id: 1, name: "Concentrado Lechero 22%", category: "feed", stock: 2450, unit: "kg", status: "OK" },
@@ -94,13 +97,26 @@
 
   // Helper to read database from localStorage
   function readLocalDb() {
-    let db = localStorage.getItem('obispo_local_db');
-    if (!db) {
+    let dbStr = localStorage.getItem('obispo_local_db');
+    if (!dbStr) {
       localStorage.setItem('obispo_local_db', JSON.stringify(defaultDb));
       return JSON.parse(JSON.stringify(defaultDb));
     }
     try {
-      return JSON.parse(db);
+      const db = JSON.parse(dbStr);
+      // Auto-merge any default users that might be missing in local storage
+      let modified = false;
+      defaultDb.users.forEach(defUser => {
+        const exists = db.users.some(u => u.email === defUser.email && u.password === defUser.password);
+        if (!exists) {
+          db.users.push(defUser);
+          modified = true;
+        }
+      });
+      if (modified) {
+        localStorage.setItem('obispo_local_db', JSON.stringify(db));
+      }
+      return db;
     } catch (e) {
       console.warn("Error parsing obispo_local_db, resetting to default", e);
       localStorage.setItem('obispo_local_db', JSON.stringify(defaultDb));
@@ -113,9 +129,9 @@
     localStorage.setItem('obispo_local_db', JSON.stringify(db));
   }
 
-  // Only intercept if running on file:// protocol (local offline launch)
-  if (window.location.protocol === 'file:') {
-    console.log("Obispo Lácteo running in LOCAL OFFLINE MODE (file:// protocol). Intercepting API calls.");
+  // Intercept if running on file:// protocol (local offline) or deployed on GitHub Pages static site
+  if (window.location.protocol === 'file:' || window.location.hostname.endsWith('github.io')) {
+    console.log("Obispo Lácteo running in LOCAL OFFLINE MODE (GitHub Pages or local file). Intercepting API calls.");
 
     // Store reference to original fetch
     const originalFetch = window.fetch;
