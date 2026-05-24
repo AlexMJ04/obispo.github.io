@@ -29,7 +29,7 @@ A. Modo Servidor Local (Node.js & Express):
    dispositivos conectados a la red local.
 
 B. Modo Cliente Local / Offline (Sin Servidor Node):
-   La plataforma cuenta con un archivo lanzador en la raíz ('sistema_web.html').
+   La plataforma cuenta con un archivo lanzador en la raíz ('index.html').
    Al abrirlo mediante doble clic, el sistema se ejecuta bajo el protocolo
    'file://' directamente en el navegador sin necesidad de iniciar Node.js.
    Las peticiones a la API son interceptadas de forma transparente por un script

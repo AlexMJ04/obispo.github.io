@@ -17,7 +17,7 @@ entorno y necesidades:
 
 1. MODO OFFLINE (RECOMENDADO PARA USO LOCAL SIN SERVIDORES):
    - Diríjase a la carpeta raíz del proyecto ('obispo_dairy_system').
-   - Ubique el archivo 'sistema_web.html'.
+   - Ubique el archivo 'index.html'.
    - Haga doble clic sobre él. Se abrirá automáticamente en su navegador web 
      predeterminado y le redirigirá a la pantalla de inicio de sesión.
    - En este modo, no requiere ejecutar el servidor Node.js ni la terminal.
